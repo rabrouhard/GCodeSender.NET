@@ -1,0 +1,71 @@
+﻿<Window x:Class="GCodeSender.NET.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:GCodeSender.NET"
+		mc:Ignorable="d"
+		Title="MainWindow" Height="600" Width="1000"
+		Closed="MainWindow_Closed">
+    <Grid>
+        <Menu IsMainMenu="True" Name="menuMain">
+            <MenuItem Header="File">
+                <MenuItem Header="Open (GCode)" Command="ApplicationCommands.Open"/>
+                <MenuItem Header="Save As (GCode)" Command="ApplicationCommands.SaveAs"/>
+                <Separator/>
+                <MenuItem Header="Exit"  Command="ApplicationCommands.Close"/>
+            </MenuItem>
+            <MenuItem Header="GRBL">
+                <MenuItem Header="Connect" Name="menuItemConnect" SubmenuOpened="Menu_ListSerialports">
+                    <MenuItem Name="menuItemNetwork" Click="Menu_Connect_Network_Click">
+                        <MenuItem.Header>
+                            <Grid Width="Auto">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Label Content="Network Address"/>
+                                <TextBox Loaded="textBoxNetworkAddress_Load" Unloaded="textBoxNetworkAddress_Unload" Name="textBoxNetworkAddress" Grid.Column="1" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" Width="110" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Disconnect" Name="menuItemDisconnect" Click="menuItemDisconnect_Click" Visibility="Collapsed"/>
+                <MenuItem Header="Configure GRBL"/>
+                <MenuItem Header="Configure Connection"/>
+            </MenuItem>
+            <MenuItem Header="Windows">
+                <MenuItem Header="Auto Levelling" IsCheckable="True"/>
+                <MenuItem Header="Preview" IsCheckable="True"/>
+                <MenuItem Header="Web Interface"/>
+            </MenuItem>
+            <MenuItem Header="Settings">
+                <MenuItem Name="menuItemSettingBaud">
+                    <MenuItem.Header>
+                        <Grid>
+							
+                            <Label Content="Serial Baud Rate"/>
+                            <TextBox Grid.Column="1" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="About"/>
+        </Menu>
+    </Grid>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="Command_Open_Executed"/>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="Command_SaveAs_Executed"/>
+    </Window.CommandBindings>
+    <Window.Resources>
+        <DataTemplate x:Key="MenuItemGrid">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </DataTemplate>
+		
+	</Window.Resources>
+</Window>
