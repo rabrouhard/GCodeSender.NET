@@ -11,6 +11,8 @@ namespace GCodeSender.NET
 		public static List<string> ActiveCommands { get; } = new List<string>();
 
 		private static IGCodeProvider GCodeProvider;
+		public static IGCodeProvider DefaultProvider { get; } = new ManualGCodeProvider();
+
 		private static int CurrentGRBLBuffer = 0;
 
 		static GCodeStreamer()

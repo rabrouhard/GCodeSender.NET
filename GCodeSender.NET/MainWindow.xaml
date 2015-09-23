@@ -6,9 +6,20 @@
 		xmlns:local="clr-namespace:GCodeSender.NET"
 		mc:Ignorable="d"
 		Title="MainWindow" Height="600" Width="1000"
-		Closed="MainWindow_Closed">
+		Closed="MainWindow_Closed"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}">
 	<Grid>
-		<Menu IsMainMenu="True" Name="menuMain">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="200"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		
+		<Menu IsMainMenu="True" Name="menuMain" Grid.ColumnSpan="2">
 			<MenuItem Header="File">
 				<MenuItem Header="Open (GCode)" Command="ApplicationCommands.Open"/>
 				<MenuItem Header="Save As (GCode)" Command="ApplicationCommands.SaveAs"/>
@@ -19,14 +30,10 @@
 				<MenuItem Header="Connect" Name="menuItemConnect" SubmenuOpened="Menu_ListSerialports">
 					<MenuItem Name="menuItemNetwork" Click="Menu_Connect_Network_Click">
 						<MenuItem.Header>
-							<Grid Width="Auto">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto" />
-									<ColumnDefinition />
-								</Grid.ColumnDefinitions>
-								<Label Content="Network Address"/>
-								<TextBox Loaded="textBoxNetworkAddress_Load" Unloaded="textBoxNetworkAddress_Unload" Name="textBoxNetworkAddress" Grid.Column="1" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" Width="110" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
-							</Grid>
+							<StackPanel Orientation="Horizontal">
+								<Label Content="Network Address" Width="100"/>
+                                <TextBox Name="textBoxNetworkAddress" MinWidth="100" Loaded="textBoxNetworkAddress_Load" Unloaded="textBoxNetworkAddress_Unload" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
+							</StackPanel>
 						</MenuItem.Header>
 					</MenuItem>
 				</MenuItem>
@@ -42,19 +49,102 @@
 			<MenuItem Header="Settings">
 				<MenuItem>
 					<MenuItem.Header>
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="100" />
-								<ColumnDefinition Width="100" />
-							</Grid.ColumnDefinitions>
-							<Label Content="Serial Baud Rate"/>
-							<TextBox Name="textBoxSettingBaud"  Loaded="textBoxSettingBaud_Loaded" Unloaded="textBoxSettingBaud_Unloaded" Grid.Column="1" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
-						</Grid>
+						<StackPanel Orientation="Horizontal">
+							<Label Content="Serial Baud Rate" Width="100"/>
+							<TextBox Name="textBoxSettingBaud" MinWidth="100"  Loaded="textBoxSettingBaud_Loaded" Unloaded="textBoxSettingBaud_Unloaded" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
+						</StackPanel>
 					</MenuItem.Header>
 				</MenuItem>
 			</MenuItem>
 			<MenuItem Header="About"/>
 		</Menu>
+		<TabControl Grid.Row="1" Grid.Column="1">
+			<TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+						<Image Source="Resources/ManualMode.png" Height="25" Width="25"/>
+						<Label Content="Manual Control"/>
+					</StackPanel>
+                </TabItem.Header>
+                <GroupBox Width="250" Height="180" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0, 60, 60, 0">
+                    <Grid Width="200" Height="130">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+							<RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" Grid.Column="1" Click="buttonManualMove" Tag="Forward">
+                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="90"/>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Button>
+                        <Button Grid.Row="1" Grid.Column="1" Click="buttonManualMove" Tag="Back">
+                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="270"/>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Button>
+                        <Button Grid.Row="1" Grid.Column="0" Click="buttonManualMove" Tag="Left">
+                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="0"/>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Button>
+                        <Button Grid.Row="1" Grid.Column="2" Click="buttonManualMove" Tag="Right">
+                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="180"/>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Button>
+                        <Button Grid.Row="0" Grid.Column="3" Click="buttonManualMove" Tag="Up">
+                            <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="0"/>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Button>
+                        <Button Grid.Row="1" Grid.Column="3" Click="buttonManualMove" Tag="Down">
+                            <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="180"/>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Button>
+						<Label Content="Increment " Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Width="40" VerticalAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="manualIncrementString" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <local:FloatValidationRule>
+                                        </local:FloatValidationRule>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+						<Label Content="mm" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+			<TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/FileMode.png" Height="25" Width="25"/>
+                        <Label Content="File Streaming"/>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+		</TabControl>
 	</Grid>
 	<Window.CommandBindings>
 		<CommandBinding Command="ApplicationCommands.Open" Executed="Command_Open_Executed"/>

@@ -57,7 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ManualGCodeProvider.cs" />
+    <Compile Include="Util\FloatValidationRule.cs" />
     <Compile Include="GCodeStreamer.cs" />
+    <Compile Include="MainWindow.ManualTab.cs" />
     <Compile Include="MainWindow.Settings.cs" />
     <Compile Include="Util.cs" />
     <Page Include="MainWindow.xaml">
@@ -102,6 +105,17 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\FileMode.png" />
+    <Resource Include="Resources\ManualMode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Up.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
