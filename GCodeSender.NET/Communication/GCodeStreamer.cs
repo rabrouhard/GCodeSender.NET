@@ -82,6 +82,7 @@ namespace GCodeSender.NET
 				return false;
 
 			GCodeProvider = newProvider;
+			newProvider.LineAdded += Update;
 
 			return true;
 		}
@@ -90,7 +91,7 @@ namespace GCodeSender.NET
 		{
 			while (true)
 			{
-				if (!GCodeProvider.IsRunning)
+				if (!IsManualMode && !GCodeProvider.IsRunning)
 					Stop();
 
 				if (!GCodeProvider.HasLine)

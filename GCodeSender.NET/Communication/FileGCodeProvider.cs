@@ -10,17 +10,35 @@ namespace GCodeSender.NET
 	class FileGCodeProvider : IGCodeProvider
 	{
 		private Queue<string> Lines = new Queue<string>();
+
 		private bool isPaused = true;
+
+		public string Path;
 
 		public FileGCodeProvider(string path)
 		{
-			foreach (string line in File.ReadAllLines(path))
-			{
-				string cleanLine = line.Remove(line.IndexOfAny(new char[] { ';', '(' }));
-				cleanLine.Replace(" ", "");
+			this.Path = path;
+			Reload();
+		}
 
-				if (!string.IsNullOrWhiteSpace(cleanLine))
-					Lines.Enqueue(line);
+		public void Reload()
+		{
+			if (!IsRunning)
+			{
+				foreach (string line in File.ReadAllLines(Path))
+				{
+					string cleanLine = line;
+
+					int commentIndex = line.IndexOfAny(new char[] { ';', '(' });
+
+					if(commentIndex >= 0)
+						cleanLine = line.Remove(commentIndex);
+
+					cleanLine = cleanLine.Replace(" ", "");
+
+					if (!string.IsNullOrWhiteSpace(cleanLine))
+						Lines.Enqueue(line);
+				}
 			}
 		}
 
