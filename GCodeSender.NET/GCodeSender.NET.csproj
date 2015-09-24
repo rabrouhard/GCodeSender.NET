@@ -63,6 +63,7 @@
     <Compile Include="Communication\FileGCodeProvider.cs" />
     <Compile Include="Communication\ManualGCodeProvider.cs" />
     <Compile Include="Communication\GCodeStreamer.cs" />
+    <Compile Include="MainWindow\MainWindow.FileTab.cs" />
     <Compile Include="MainWindow\MainWindow.ManualTab.cs" />
     <Compile Include="MainWindow\MainWindow.Settings.cs" />
     <Compile Include="Util\Util.cs" />
@@ -134,6 +135,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Pause.png" />
+    <Resource Include="Resources\Play.png" />
+    <Resource Include="Resources\Restart.png" />
+    <Resource Include="Resources\Stop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
