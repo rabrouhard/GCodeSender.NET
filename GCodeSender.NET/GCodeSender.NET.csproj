@@ -58,7 +58,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ManualGCodeProvider.cs" />
-    <Compile Include="Util\FloatValidationRule.cs" />
     <Compile Include="GCodeStreamer.cs" />
     <Compile Include="MainWindow.ManualTab.cs" />
     <Compile Include="MainWindow.Settings.cs" />
@@ -115,7 +114,9 @@
   <ItemGroup>
     <Resource Include="Resources\Up.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Util\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

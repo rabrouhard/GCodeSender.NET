@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,21 +13,22 @@ namespace GCodeSender.NET
 {
 	partial class MainWindow
 	{
-
-		private string _stringManualIncrement = "1.0";
-		private double manualIncrement = 1.0;
-		public string manualIncrementString {
-			get { return _stringManualIncrement; }
-			set
-			{
-				_stringManualIncrement = value;
-				double.TryParse(value, out manualIncrement);
-			}
+		private void textBoxManualIncrement_Loaded(object sender, RoutedEventArgs e)
+		{
+			textBoxManualIncrement.Text = Properties.Settings.Default.ManualJogIncrement.ToString();
 		}
+
 		private void buttonManualMove(object sender, RoutedEventArgs e)
 		{
-			if (manualIncrement <= 0)
+			double increment;
+
+			if (!double.TryParse(textBoxManualIncrement.Text, NumberStyles.Float, App.CultureEN, out increment))
+			{
+				App.Message("Invalid Increment");
 				return;
+			}
+
+			Properties.Settings.Default.ManualJogIncrement = increment;
 		}
 	}
 }

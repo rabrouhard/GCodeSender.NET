@@ -14,5 +14,8 @@
     <Setting Name="ReceiveBufferSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1024</Value>
     </Setting>
+    <Setting Name="ManualJogIncrement" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

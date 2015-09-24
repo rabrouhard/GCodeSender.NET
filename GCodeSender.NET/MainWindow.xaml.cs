@@ -116,5 +116,7 @@ namespace GCodeSender.NET
 		{
 			Properties.Settings.Default.Save();
 		}
+
+
 	}
 }
