@@ -53,11 +53,8 @@ namespace GCodeSender.NET
 			ActiveCommands.Clear();
 			CurrentGRBLBuffer = 0;
 
-			if (GCodeProvider != null)
-			{
-				GCodeProvider.Stop();
-				GCodeProvider = ManualProvider;
-			}
+			GCodeProvider.Stop();
+			GCodeProvider = ManualProvider;
 		}
 
 		public static void Stop()
@@ -70,7 +67,7 @@ namespace GCodeSender.NET
 		{
 			get
 			{
-				return GCodeProvider.HasLine || ActiveCommands.Count > 0 || GCodeProvider.IsRunning;
+				return GCodeProvider.IsRunning || ActiveCommands.Count > 0;
 			}
 		}
 
@@ -93,13 +90,19 @@ namespace GCodeSender.NET
 		{
 			while (true)
 			{
+				if (!GCodeProvider.IsRunning)
+					Stop();
+
 				if (!GCodeProvider.HasLine)
 					return;
 
-				if (CurrentGRBLBuffer + GCodeProvider.PeekLineLength() + 1 > Properties.Settings.Default.GrblBufferSize)    //account for cr + lf
+				if (CurrentGRBLBuffer + GCodeProvider.PeekLineLength() + 1 > Properties.Settings.Default.GrblBufferSize)    //account for lf
 					return;
 
 				string line = GCodeProvider.GetLine();
+
+				if (string.IsNullOrWhiteSpace(line))
+					continue;
 
 				CurrentGRBLBuffer += line.Length + 1;
 
@@ -151,7 +154,6 @@ namespace GCodeSender.NET
 				Stop();
 				App.Message(line);
 			}
-
 			Update();
 		}
 	}

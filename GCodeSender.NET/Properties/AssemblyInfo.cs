@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("GCodeSender.NET")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("martin2250")]
 [assembly: AssemblyProduct("GCodeSender.NET")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright ©martin2250  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -26,11 +26,6 @@ namespace GCodeSender.NET
 			}
 		}
 
-		/// <summary>
-		/// is never fired
-		/// </summary>
-		public event Action Completed;
-
 		public event Action LineAdded;
 
 		public int PeekLineLength()
