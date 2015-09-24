@@ -8,7 +8,8 @@
 		Title="MainWindow" 
 		Height="500" MinHeight="400"
 		Width="800" MinWidth="600"
-		Closed="MainWindow_Closed">
+		Closed="MainWindow_Closed"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -70,7 +71,7 @@
             <TabItem Name="tabItemStatus">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Resources/Info.png" Height="25" Width="25"/>
+                        <Image Source="../Resources/Info.png" Height="25" Width="25"/>
                         <Label Content="Status"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -78,7 +79,7 @@
             <TabItem Name="tabItemManualMode" IsEnabled="False">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Resources/ManualMode.png" Height="25" Width="25"/>
+                        <Image Source="../Resources/ManualMode.png" Height="25" Width="25"/>
                         <Label Content="Manual Control"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -86,7 +87,7 @@
                     <GroupBox Margin="10" DockPanel.Dock="Right">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="Resources/Jogging.png" Height="25" Width="25"/>
+                                <Image Source="../Resources/Jogging.png" Height="25" Width="25"/>
                                 <Label Content="Jogging"/>
                             </StackPanel>
                         </GroupBox.Header>
@@ -103,42 +104,42 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Button Grid.Row="0" Grid.Column="1" Click="buttonManualMove" Tag="Forward">
-                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image Source="../Resources/Arrow.png" RenderTransformOrigin=".5,.5">
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="90"/>
                                     </Image.RenderTransform>
                                 </Image>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="1" Click="buttonManualMove" Tag="Back">
-                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image Source="../Resources/Arrow.png" RenderTransformOrigin=".5,.5">
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="270"/>
                                     </Image.RenderTransform>
                                 </Image>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="0" Click="buttonManualMove" Tag="Left">
-                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image Source="../Resources/Arrow.png" RenderTransformOrigin=".5,.5">
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="0"/>
                                     </Image.RenderTransform>
                                 </Image>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="2" Click="buttonManualMove" Tag="Right">
-                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                <Image Source="../Resources/Arrow.png" RenderTransformOrigin=".5,.5">
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="180"/>
                                     </Image.RenderTransform>
                                 </Image>
                             </Button>
                             <Button Grid.Row="0" Grid.Column="3" Click="buttonManualMove" Tag="Up">
-                                <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
+                                <Image Source="../Resources/Up.png" RenderTransformOrigin=".5,.5">
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="0"/>
                                     </Image.RenderTransform>
                                 </Image>
                             </Button>
                             <Button Grid.Row="1" Grid.Column="3" Click="buttonManualMove" Tag="Down">
-                                <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
+                                <Image Source="../Resources/Up.png" RenderTransformOrigin=".5,.5">
                                     <Image.RenderTransform>
                                         <RotateTransform Angle="180"/>
                                     </Image.RenderTransform>
@@ -152,7 +153,7 @@
                     <GroupBox Margin="10" DockPanel.Dock="Left">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="Resources/Console.png" Height="25" Width="25"/>
+                                <Image Source="../Resources/Console.png" Height="25" Width="25"/>
                                 <Label Content="Commands"/>
                             </StackPanel>
                         </GroupBox.Header>
@@ -161,13 +162,13 @@
                             <DockPanel DockPanel.Dock="Top" Margin="10, 0, 10, 3" LastChildFill="False">
                                 <Button DockPanel.Dock="Right" Click="buttonManualCommand_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="Resources/Send.png" Height="25" Width="25"/>
+                                        <Image Source="../Resources/Send.png" Height="25" Width="25"/>
                                         <Label Content="Send"/>
                                     </StackPanel>
                                 </Button>
                                 <Button DockPanel.Dock="Right" Margin="3, 0, 3, 0">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="Resources/Favorite.png" Height="25" Width="25"/>
+                                        <Image Source="../Resources/Favorite.png" Height="25" Width="25"/>
                                         <Label Content="Add To Quick Access"/>
                                     </StackPanel>
                                 </Button>
@@ -182,10 +183,18 @@
             <TabItem Name="tabItemFileMode" IsEnabled="False">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Resources/FileMode.png" Height="25" Width="25"/>
+                        <Image Source="../Resources/FileMode.png" Height="25" Width="25"/>
                         <Label Content="File Streaming"/>
                     </StackPanel>
                 </TabItem.Header>
+                <GroupBox>
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="../Resources/FileMode.png" Height="25" Width="25"/>
+                            <Label Content="File Streaming"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+				</GroupBox>
             </TabItem>
         </TabControl>
 		
