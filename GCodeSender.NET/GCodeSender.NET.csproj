@@ -57,13 +57,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ManualGCodeProvider.cs" />
-    <Compile Include="GCodeStreamer.cs" />
-    <Compile Include="MainWindow.ManualTab.cs" />
-    <Compile Include="MainWindow.Settings.cs" />
+    <Compile Include="Communication\ManualGCodeProvider.cs" />
+    <Compile Include="Communication\GCodeStreamer.cs" />
+    <Compile Include="MainWindow\MainWindow.ManualTab.cs" />
+    <Compile Include="MainWindow\MainWindow.Settings.cs" />
     <Compile Include="Util\Util.cs" />
     <Compile Include="Util\GrblErrorProvider.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="MainWindow\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -71,9 +71,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Connection.cs" />
-    <Compile Include="IGCodeProvider.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Communication\Connection.cs" />
+    <Compile Include="Communication\IGCodeProvider.cs" />
+    <Compile Include="MainWindow\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

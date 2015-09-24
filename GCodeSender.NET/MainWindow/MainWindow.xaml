@@ -8,8 +8,7 @@
 		Title="MainWindow" 
 		Height="500" MinHeight="400"
 		Width="800" MinWidth="600"
-		Closed="MainWindow_Closed"
-		DataContext="{Binding RelativeSource={RelativeSource Self}}">
+		Closed="MainWindow_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -189,7 +188,8 @@
                 </TabItem.Header>
             </TabItem>
         </TabControl>
-		<Button Content="E-Stop" Grid.Column="0" Grid.Row="3"/>
+		
+		<Label Content="E-Stop" Grid.Column="0" Grid.Row="3"/>
     </Grid>
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" Executed="Command_Open_Executed"/>

@@ -111,7 +111,6 @@ namespace GCodeSender.NET
 
 		private static void Connection_LineReceived(string line)
 		{
-			Console.WriteLine("line rec");
 			if (line.StartsWith("ok"))
 			{
 				if (ActiveCommands.Count > 0)
