@@ -5,9 +5,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GCodeSender.NET
+namespace GCodeSender.NET.Util
 {
-	static class Util
+	static class Parsers
 	{
 		public static IPEndPoint ParseIPEndPoint(string text)
 		{

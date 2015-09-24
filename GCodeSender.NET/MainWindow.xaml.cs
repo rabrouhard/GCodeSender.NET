@@ -25,8 +25,22 @@ namespace GCodeSender.NET
 		{
 			InitializeComponent();
 			Connection.Connected += Connection_Connected;
+			Connection.Connected += ConnectionStatusChanged;
 			Connection.Disconnected += Connection_Disconnected;
+			Connection.Disconnected += ConnectionStatusChanged;
+
 			Connection.LineReceived += Connection_LineReceived;
+
+			GCodeStreamer.GCodeProviderChanged += ConnectionStatusChanged;
+		}
+
+		private void ConnectionStatusChanged()
+		{
+			tabItemManualMode.IsEnabled = Connection.IsConnected && GCodeStreamer.IsManualMode;
+			tabItemFileMode.IsEnabled = Connection.IsConnected && (GCodeStreamer.IsManualMode  /*|| GCodeStreamer.IsFileMode*/);
+
+			if (!((TabItem)tabControl.SelectedItem).IsEnabled)
+				tabControl.SelectedItem = tabItemStatus;
 		}
 
 		private void Connection_LineReceived(string line)
@@ -117,6 +131,6 @@ namespace GCodeSender.NET
 			Properties.Settings.Default.Save();
 		}
 
-
+		
 	}
 }

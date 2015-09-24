@@ -30,5 +30,19 @@ namespace GCodeSender.NET
 
 			Properties.Settings.Default.ManualJogIncrement = increment;
 		}
+
+		private void buttonManualCommand_Click(object sender, RoutedEventArgs e)
+		{
+			GCodeStreamer.ManualProvider.SendLine(textBoxManualCommand.Text);
+		}
+
+		private void textBoxManualCommand_KeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.Key == Key.Return)
+			{
+				e.Handled = true;
+				buttonManualCommand_Click(null, null);
+			}
+		}
 	}
 }

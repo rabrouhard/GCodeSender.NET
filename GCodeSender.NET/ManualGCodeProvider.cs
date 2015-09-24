@@ -10,17 +10,33 @@ namespace GCodeSender.NET
 	{
 		private Queue<string> CommandQueue = new Queue<string>();
 
-		public int AvailableLines { get { return CommandQueue.Count; } }
-
-		public bool IsActive
+		public bool HasLine
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return CommandQueue.Count > 0;
 			}
 		}
 
+		public bool IsRunning
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// is never fired
+		/// </summary>
+		public event Action Completed;
+
 		public event Action LineAdded;
+
+		public int PeekLineLength()
+		{
+			return CommandQueue.Peek().Length;
+		}
 
 		public string GetLine()
 		{
@@ -29,7 +45,14 @@ namespace GCodeSender.NET
 
 		public void Stop()
 		{
-			throw new NotImplementedException();
+			CommandQueue.Clear();
+		}
+
+		public void SendLine(string line)
+		{
+			CommandQueue.Enqueue(line);
+			
+			LineAdded();
 		}
 	}
 }

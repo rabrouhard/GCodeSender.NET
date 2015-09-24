@@ -61,7 +61,8 @@
     <Compile Include="GCodeStreamer.cs" />
     <Compile Include="MainWindow.ManualTab.cs" />
     <Compile Include="MainWindow.Settings.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Util\Util.cs" />
+    <Compile Include="Util\GrblErrorProvider.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -115,7 +116,20 @@
     <Resource Include="Resources\Up.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Util\" />
+    <Resource Include="Resources\Jogging.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GrblErrors.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Console.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Favorite.png" />
+    <Resource Include="Resources\Send.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Info.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

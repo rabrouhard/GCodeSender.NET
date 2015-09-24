@@ -17,5 +17,8 @@
     <Setting Name="ManualJogIncrement" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="GrblBufferSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">127</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

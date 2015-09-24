@@ -28,6 +28,8 @@ namespace GCodeSender.NET
 			{
 				if (_isConnected != value)
 				{
+					_isConnected = value;
+
 					if (value)
 					{
 						Connected();
@@ -37,8 +39,6 @@ namespace GCodeSender.NET
 						Disconnected();
 					}
 				}
-
-				_isConnected = value;
 			}
 		}
 
@@ -70,7 +70,10 @@ namespace GCodeSender.NET
 		private static async void ReceiveTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			if (!ConnectionStream.CanRead)
+			{
 				Disconnect();
+				return;
+			}
 
 			if (!ConnectionStreamAvailable())
 				return;
@@ -142,7 +145,7 @@ namespace GCodeSender.NET
 			try
 			{
 				TcpClient tcpc = new TcpClient();
-				tcpc.Connect(Util.ParseIPEndPoint(address));
+				tcpc.Connect(Util.Parsers.ParseIPEndPoint(address));
 
 				NetworkStream nets = tcpc.GetStream();
 
@@ -182,7 +185,20 @@ namespace GCodeSender.NET
 			}
 		}
 
+		public static void WriteLine(string line)
+		{
+			if(!ConnectionStream.CanWrite)
+			{
+				Disconnect();
+				return;
+			}
 
+			line += "\n";
+			byte[] lineBin = Encoding.ASCII.GetBytes(line);
+
+			ConnectionStream.Write(lineBin, 0, lineBin.Length);
+			ConnectionStream.Flush();
+		}
 
 
 

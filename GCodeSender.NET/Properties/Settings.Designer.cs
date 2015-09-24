@@ -82,5 +82,17 @@ namespace GCodeSender.NET.Properties {
                 this["ManualJogIncrement"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("127")]
+        public int GrblBufferSize {
+            get {
+                return ((int)(this["GrblBufferSize"]));
+            }
+            set {
+                this["GrblBufferSize"] = value;
+            }
+        }
     }
 }

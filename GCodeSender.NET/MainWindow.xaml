@@ -5,129 +5,182 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:GCodeSender.NET"
 		mc:Ignorable="d"
-		Title="MainWindow" Height="600" Width="1000"
+		Title="MainWindow" 
+		Height="500" MinHeight="400"
+		Width="800" MinWidth="600"
 		Closed="MainWindow_Closed"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}">
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition />
-		</Grid.RowDefinitions>
-		
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="200"/>
-			<ColumnDefinition/>
-		</Grid.ColumnDefinitions>
-		
-		<Menu IsMainMenu="True" Name="menuMain" Grid.ColumnSpan="2">
-			<MenuItem Header="File">
-				<MenuItem Header="Open (GCode)" Command="ApplicationCommands.Open"/>
-				<MenuItem Header="Save As (GCode)" Command="ApplicationCommands.SaveAs"/>
-				<Separator/>
-				<MenuItem Header="Exit"  Command="ApplicationCommands.Close"/>
-			</MenuItem>
-			<MenuItem Header="GRBL">
-				<MenuItem Header="Connect" Name="menuItemConnect" SubmenuOpened="Menu_ListSerialports">
-					<MenuItem Name="menuItemNetwork" Click="Menu_Connect_Network_Click">
-						<MenuItem.Header>
-							<StackPanel Orientation="Horizontal">
-								<Label Content="Network Address" Width="100"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="250" MinHeight="250"/>
+            <RowDefinition Height="3"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" MinWidth="200"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" Grid.Row="1" Grid.RowSpan="3"/>
+        <GridSplitter Grid.Row="2" Height="3" HorizontalAlignment="Stretch" Grid.Column="2"/>
+
+        <Menu IsMainMenu="True" Name="menuMain" Grid.ColumnSpan="3">
+            <MenuItem Header="File">
+                <MenuItem Header="Open (GCode)" Command="ApplicationCommands.Open"/>
+                <MenuItem Header="Save As (GCode)" Command="ApplicationCommands.SaveAs"/>
+                <Separator/>
+                <MenuItem Header="Exit"  Command="ApplicationCommands.Close"/>
+            </MenuItem>
+            <MenuItem Header="GRBL">
+                <MenuItem Header="Connect" Name="menuItemConnect" SubmenuOpened="Menu_ListSerialports">
+                    <MenuItem Name="menuItemNetwork" Click="Menu_Connect_Network_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Network Address" Width="100"/>
                                 <TextBox Name="textBoxNetworkAddress" MinWidth="100" Loaded="textBoxNetworkAddress_Load" Unloaded="textBoxNetworkAddress_Unload" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
-							</StackPanel>
-						</MenuItem.Header>
-					</MenuItem>
-				</MenuItem>
-				<MenuItem Header="Disconnect" Name="menuItemDisconnect" Click="menuItemDisconnect_Click" Visibility="Collapsed"/>
-				<MenuItem Header="Configure GRBL"/>
-				<MenuItem Header="Configure Connection"/>
-			</MenuItem>
-			<MenuItem Header="Windows">
-				<MenuItem Header="Auto Levelling" IsCheckable="True"/>
-				<MenuItem Header="Preview" IsCheckable="True"/>
-				<MenuItem Header="Web Interface"/>
-			</MenuItem>
-			<MenuItem Header="Settings">
-				<MenuItem>
-					<MenuItem.Header>
-						<StackPanel Orientation="Horizontal">
-							<Label Content="Serial Baud Rate" Width="100"/>
-							<TextBox Name="textBoxSettingBaud" MinWidth="100"  Loaded="textBoxSettingBaud_Loaded" Unloaded="textBoxSettingBaud_Unloaded" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
-						</StackPanel>
-					</MenuItem.Header>
-				</MenuItem>
-			</MenuItem>
-			<MenuItem Header="About"/>
-		</Menu>
-		<TabControl Grid.Row="1" Grid.Column="1">
-			<TabItem>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Disconnect" Name="menuItemDisconnect" Click="menuItemDisconnect_Click" Visibility="Collapsed"/>
+                <MenuItem Header="Configure GRBL"/>
+                <MenuItem Header="Configure Connection"/>
+            </MenuItem>
+            <MenuItem Header="Windows">
+                <MenuItem Header="Auto Levelling" IsCheckable="True"/>
+                <MenuItem Header="Preview" IsCheckable="True"/>
+                <MenuItem Header="Web Interface"/>
+            </MenuItem>
+            <MenuItem Header="Settings">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Serial Baud Rate" Width="100"/>
+                            <TextBox Name="textBoxSettingBaud" MinWidth="100"  Loaded="textBoxSettingBaud_Loaded" Unloaded="textBoxSettingBaud_Unloaded" PreviewLostKeyboardFocus="MenuTextBoxLostKeyboardFocus" TextAlignment="Center" VerticalAlignment="Center" Padding="3"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="About"/>
+        </Menu>
+
+        <TabControl Name="tabControl" Grid.Row="1" Grid.Column="2">
+            <TabItem Name="tabItemStatus">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-						<Image Source="Resources/ManualMode.png" Height="25" Width="25"/>
-						<Label Content="Manual Control"/>
-					</StackPanel>
+                        <Image Source="Resources/Info.png" Height="25" Width="25"/>
+                        <Label Content="Status"/>
+                    </StackPanel>
                 </TabItem.Header>
-                <GroupBox Width="250" Height="180" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0, 60, 60, 0">
-                    <Grid Width="200" Height="130">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="50"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="50"/>
-							<RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Grid.Column="1" Click="buttonManualMove" Tag="Forward">
-                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
-                                <Image.RenderTransform>
-                                    <RotateTransform Angle="90"/>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="1" Click="buttonManualMove" Tag="Back">
-                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
-                                <Image.RenderTransform>
-                                    <RotateTransform Angle="270"/>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="0" Click="buttonManualMove" Tag="Left">
-                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
-                                <Image.RenderTransform>
-                                    <RotateTransform Angle="0"/>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="2" Click="buttonManualMove" Tag="Right">
-                            <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
-                                <Image.RenderTransform>
-                                    <RotateTransform Angle="180"/>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Button>
-                        <Button Grid.Row="0" Grid.Column="3" Click="buttonManualMove" Tag="Up">
-                            <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
-                                <Image.RenderTransform>
-                                    <RotateTransform Angle="0"/>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="3" Click="buttonManualMove" Tag="Down">
-                            <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
-                                <Image.RenderTransform>
-                                    <RotateTransform Angle="180"/>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Button>
-						<Label Content="Increment " Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox Name="textBoxManualIncrement" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Width="40" VerticalAlignment="Center" Loaded="textBoxManualIncrement_Loaded" />
-                        <Label Content="mm" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"/>
-                    </Grid>
-                </GroupBox>
             </TabItem>
-			<TabItem>
+            <TabItem Name="tabItemManualMode" IsEnabled="False">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/ManualMode.png" Height="25" Width="25"/>
+                        <Label Content="Manual Control"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <DockPanel>
+                    <GroupBox Margin="10" DockPanel.Dock="Right">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Jogging.png" Height="25" Width="25"/>
+                                <Label Content="Jogging"/>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <Grid Width="200" Height="130" Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Grid.Column="1" Click="buttonManualMove" Tag="Forward">
+                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="90"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="1" Click="buttonManualMove" Tag="Back">
+                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="270"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="0" Click="buttonManualMove" Tag="Left">
+                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="0"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="2" Click="buttonManualMove" Tag="Right">
+                                <Image Source="Resources/Arrow.png" RenderTransformOrigin=".5,.5">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="180"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Button Grid.Row="0" Grid.Column="3" Click="buttonManualMove" Tag="Up">
+                                <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="0"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="3" Click="buttonManualMove" Tag="Down">
+                                <Image Source="Resources/Up.png" RenderTransformOrigin=".5,.5">
+                                    <Image.RenderTransform>
+                                        <RotateTransform Angle="180"/>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Label Content="Increment " Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBox Name="textBoxManualIncrement" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Width="40" VerticalAlignment="Center" Loaded="textBoxManualIncrement_Loaded" />
+                            <Label Content="mm" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Margin="10" DockPanel.Dock="Left">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Resources/Console.png" Height="25" Width="25"/>
+                                <Label Content="Commands"/>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <DockPanel>
+							<TextBox Name="textBoxManualCommand" Margin="10, 10, 10, 3" FontSize="16" DockPanel.Dock="Top" KeyDown="textBoxManualCommand_KeyDown"/>
+                            <DockPanel DockPanel.Dock="Top" Margin="10, 0, 10, 3" LastChildFill="False">
+                                <Button DockPanel.Dock="Right" Click="buttonManualCommand_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Resources/Send.png" Height="25" Width="25"/>
+                                        <Label Content="Send"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button DockPanel.Dock="Right" Margin="3, 0, 3, 0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Resources/Favorite.png" Height="25" Width="25"/>
+                                        <Label Content="Add To Quick Access"/>
+                                    </StackPanel>
+                                </Button>
+                            </DockPanel>
+                            <ScrollViewer>
+								
+							</ScrollViewer>
+						</DockPanel>
+                    </GroupBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Name="tabItemFileMode" IsEnabled="False">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources/FileMode.png" Height="25" Width="25"/>
@@ -135,10 +188,11 @@
                     </StackPanel>
                 </TabItem.Header>
             </TabItem>
-		</TabControl>
-	</Grid>
-	<Window.CommandBindings>
-		<CommandBinding Command="ApplicationCommands.Open" Executed="Command_Open_Executed"/>
-		<CommandBinding Command="ApplicationCommands.SaveAs" Executed="Command_SaveAs_Executed"/>
-	</Window.CommandBindings>
+        </TabControl>
+		<Button Content="E-Stop" Grid.Column="0" Grid.Row="3"/>
+    </Grid>
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="Command_Open_Executed"/>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="Command_SaveAs_Executed"/>
+    </Window.CommandBindings>
 </Window>
