@@ -20,10 +20,5 @@ namespace GCodeSender.NET
 		{
 			MessageBox.Show(message);
 		}
-
-		private void App_Startup(object sender, StartupEventArgs e)
-		{
-			
-		}
 	}
 }
