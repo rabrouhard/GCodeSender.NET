@@ -44,7 +44,7 @@ namespace GCodeSender.NET
 		{
 			Console.WriteLine("Initializing GCode Streamer ...");
 
-			LineReceived += (line)=> { };
+			LineReceived += (line)=> { };	//prevent exceptions when handler is empty
 
 
 			streamWorker = new BackgroundWorker() { WorkerReportsProgress = true };

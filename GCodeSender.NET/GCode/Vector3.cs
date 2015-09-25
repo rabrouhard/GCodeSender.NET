@@ -7,7 +7,7 @@ using System.Globalization;
 #endregion
 
 /// <summary>
-/// vector of floats with three components (x,y,z)
+/// vector of doubles with three components (x,y,z)
 /// </summary>
 /// <author>Richard Potter BSc(Hons)</author>
 /// <created>Jun-04</created>
@@ -35,24 +35,24 @@ namespace GCodeSender.NET
 		/// <summary>
 		/// The X component of the vector
 		/// </summary>
-		private float x;
+		private double x;
 
 		/// <summary>
 		/// The Y component of the vector
 		/// </summary>
-		private float y;
+		private double y;
 
 		/// <summary>
 		/// The Z component of the vector
 		/// </summary>
-		private float z;
+		private double z;
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Constructor for the Vector3 class accepting three floats
+		/// Constructor for the Vector3 class accepting three doubles
 		/// </summary>
 		/// <param name="x">The new x value for the Vector3</param>
 		/// <param name="y">The new y value for the Vector3</param>
@@ -62,7 +62,7 @@ namespace GCodeSender.NET
 		/// This results in the need for pre-initialisation initialisation of the Vector3 components to 0 
 		/// Due to the necessity for struct's variables to be set in the constructor before moving control
 		/// </implementation>
-		public Vector3(float x, float y, float z)
+		public Vector3(double x, double y, double z)
 		{
 			// Pre-initialisation initialisation
 			// Implemented because a struct's variables always have to be set in the constructor before moving control
@@ -83,7 +83,7 @@ namespace GCodeSender.NET
 		/// <implementation>
 		/// Uses the VectorArray property to avoid validation code duplication 
 		/// </implementation>
-		public Vector3(float[] xyz)
+		public Vector3(double[] xyz)
 		{
 			// Pre-initialisation initialisation
 			// Implemented because a struct's variables always have to be set in the constructor before moving control
@@ -123,7 +123,7 @@ namespace GCodeSender.NET
 		/// <summary>
 		/// Property for the x component of the Vector3
 		/// </summary>
-		public float X
+		public double X
 		{
 			get { return x; }
 			set { x = value; }
@@ -132,7 +132,7 @@ namespace GCodeSender.NET
 		/// <summary>
 		/// Property for the y component of the Vector3
 		/// </summary>
-		public float Y
+		public double Y
 		{
 			get { return y; }
 			set { y = value; }
@@ -141,7 +141,7 @@ namespace GCodeSender.NET
 		/// <summary>
 		/// Property for the z component of the Vector3
 		/// </summary>
-		public float Z
+		public double Z
 		{
 			get { return z; }
 			set { z = value; }
@@ -150,12 +150,12 @@ namespace GCodeSender.NET
 		/// <summary>
 		/// Property for the magnitude (aka. length or absolute value) of the Vector3
 		/// </summary>
-		public float Magnitude
+		public double Magnitude
 		{
 			get
 			{
 				return
-				(float)Math.Sqrt(SumComponentSqrs());
+				(double)Math.Sqrt(SumComponentSqrs());
 			}
 			set
 			{
@@ -176,9 +176,9 @@ namespace GCodeSender.NET
 		/// Thrown if the array argument does not contain exactly three components 
 		/// </exception> 
 		[XmlIgnore]
-		public float[] Array
+		public double[] Array
 		{
-			get { return new float[] { x, y, z }; }
+			get { return new double[] { x, y, z }; }
 			set
 			{
 				if (value.Length == 3)
@@ -202,7 +202,7 @@ namespace GCodeSender.NET
 		/// <exception cref="System.ArgumentException">
 		/// Thrown if the array argument does not contain exactly three components 
 		/// </exception>
-		public float this[int index]
+		public double this[int index]
 		{
 			get
 			{
@@ -277,7 +277,7 @@ namespace GCodeSender.NET
 		/// <param name="s2">Scalar value to be multiplied by </param>
 		/// <returns>Vector3 representing the product of the vector and scalar</returns>
 		/// <Acknowledgement>This code is adapted from CSOpenGL - Lucas Viñas Livschitz </Acknowledgement>
-		public static Vector3 operator *(Vector3 v1, float s2)
+		public static Vector3 operator *(Vector3 v1, double s2)
 		{
 			return
 			(
@@ -299,10 +299,10 @@ namespace GCodeSender.NET
 		/// <Acknowledgement>This code is adapted from CSOpenGL - Lucas Viñas Livschitz </Acknowledgement>
 		/// <Implementation>
 		/// Using the commutative law 'scalar x vector'='vector x scalar'.
-		/// Thus, this function calls 'operator*(Vector3 v1, float s2)'.
+		/// Thus, this function calls 'operator*(Vector3 v1, double s2)'.
 		/// This avoids repetition of code.
 		/// </Implementation>
-		public static Vector3 operator *(float s1, Vector3 v2)
+		public static Vector3 operator *(double s1, Vector3 v2)
 		{
 			return v2 * s1;
 		}
@@ -314,7 +314,7 @@ namespace GCodeSender.NET
 		/// <param name="s2">Scalar value to be divided by </param>
 		/// <returns>Vector3 representing the division of the vector and scalar</returns>
 		/// <Acknowledgement>This code is adapted from CSOpenGL - Lucas Viñas Livschitz </Acknowledgement>
-		public static Vector3 operator /(Vector3 v1, float s2)
+		public static Vector3 operator /(Vector3 v1, double s2)
 		{
 			return
 			(
@@ -507,7 +507,7 @@ namespace GCodeSender.NET
 		/// <implementation>
 		/// </implementation>
 		/// <Acknowledgement>This code is adapted from CSOpenGL - Lucas Viñas Livschitz </Acknowledgement>
-		public static float DotProduct(Vector3 v1, Vector3 v2)
+		public static double DotProduct(Vector3 v1, Vector3 v2)
 		{
 			return
 			(
@@ -525,7 +525,7 @@ namespace GCodeSender.NET
 		/// <implementation>
 		/// <see cref="DotProduct(Vector3)"/>
 		/// </implementation>
-		public float DotProduct(Vector3 other)
+		public double DotProduct(Vector3 other)
 		{
 			return DotProduct(this, other);
 		}
@@ -545,7 +545,7 @@ namespace GCodeSender.NET
 		/// <see cref="DotProduct(Vector3, Vector3)"/>
 		/// </implementation>
 		/// <Acknowledgement>This code was provided by Michał Bryłka</Acknowledgement>
-		public static float MixedProduct(Vector3 v1, Vector3 v2, Vector3 v3)
+		public static double MixedProduct(Vector3 v1, Vector3 v2, Vector3 v3)
 		{
 			return DotProduct(CrossProduct(v1, v2), v3);
 		}
@@ -563,7 +563,7 @@ namespace GCodeSender.NET
 		/// <see cref="MixedProduct(Vector3, Vector3, Vector3)"/>
 		/// Uses MixedProduct(Vector3, Vector3, Vector3) to avoid code duplication
 		/// </implementation>
-		public float MixedProduct(Vector3 other_v1, Vector3 other_v2)
+		public double MixedProduct(Vector3 other_v1, Vector3 other_v2)
 		{
 			return DotProduct(CrossProduct(this, other_v1), other_v2);
 		}
@@ -592,7 +592,7 @@ namespace GCodeSender.NET
 			else
 			{
 				// find the inverse of the vectors magnitude
-				float inverse = 1 / v1.Magnitude;
+				double inverse = 1 / v1.Magnitude;
 				return
 				(
 					new Vector3
@@ -636,7 +636,7 @@ namespace GCodeSender.NET
 		/// Thrown when the control is not between values of 0 and 1 and extrapolation is not allowed
 		/// </exception>
 		/// <Acknowledgement>This code is adapted from Exocortex - Ben Houston </Acknowledgement>
-		public static Vector3 Interpolate(Vector3 v1, Vector3 v2, float control, bool allowExtrapolation)
+		public static Vector3 Interpolate(Vector3 v1, Vector3 v2, double control, bool allowExtrapolation)
 		{
 			if (!allowExtrapolation && (control > 1 || control < 0))
 			{
@@ -670,14 +670,14 @@ namespace GCodeSender.NET
 		/// <param name="control">The interpolated point between the two vectors to retrieve (fraction between 0 and 1)</param>
 		/// <returns>The value at an arbitrary distance (interpolation) between two vectors</returns>
 		/// <implementation>
-		/// <see cref="Interpolate(Vector3, Vector3, float, bool)"/>
-		/// Uses the Interpolate(Vector3,Vector3,float,bool) method to avoid code duplication
+		/// <see cref="Interpolate(Vector3, Vector3, double, bool)"/>
+		/// Uses the Interpolate(Vector3,Vector3,double,bool) method to avoid code duplication
 		/// </implementation>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the control is not between values of 0 and 1
 		/// </exception>
 		/// <Acknowledgement>This code is adapted from Exocortex - Ben Houston </Acknowledgement>
-		public static Vector3 Interpolate(Vector3 v1, Vector3 v2, float control)
+		public static Vector3 Interpolate(Vector3 v1, Vector3 v2, double control)
 		{
 			return Interpolate(v1, v2, control, false);
 		}
@@ -690,11 +690,11 @@ namespace GCodeSender.NET
 		/// <param name="control">The interpolated point between the two vectors to retrieve (fraction between 0 and 1)</param>
 		/// <returns>The value at an arbitrary distance (interpolation) between two vectors</returns>
 		/// <implementation>
-		/// <see cref="Interpolate(Vector3, Vector3, float)"/>
+		/// <see cref="Interpolate(Vector3, Vector3, double)"/>
 		/// Overload for Interpolate method, finds an interpolated value between this Vector3 and another
-		/// Uses the Interpolate(Vector3,Vector3,float) method to avoid code duplication
+		/// Uses the Interpolate(Vector3,Vector3,double) method to avoid code duplication
 		/// </implementation>
-		public Vector3 Interpolate(Vector3 other, float control)
+		public Vector3 Interpolate(Vector3 other, double control)
 		{
 			return Interpolate(this, other, control);
 		}
@@ -707,13 +707,13 @@ namespace GCodeSender.NET
 		/// <param name="allowExtrapolation">True if the control may represent a point not on the vertex between v1 and v2</param>
 		/// <returns>The value at an arbitrary distance (interpolation) between two vectors or an extrapolated point on the extended virtex</returns>
 		/// <implementation>
-		/// <see cref="Interpolate(Vector3, Vector3, float, bool)"/>
-		/// Uses the Interpolate(Vector3,Vector3,float,bool) method to avoid code duplication
+		/// <see cref="Interpolate(Vector3, Vector3, double, bool)"/>
+		/// Uses the Interpolate(Vector3,Vector3,double,bool) method to avoid code duplication
 		/// </implementation>
 		/// <exception cref="System.ArgumentOutOfRangeException">
 		/// Thrown when the control is not between values of 0 and 1 and extrapolation is not allowed
 		/// </exception>
-		public Vector3 Interpolate(Vector3 other, float control, bool allowExtrapolation)
+		public Vector3 Interpolate(Vector3 other, double control, bool allowExtrapolation)
 		{
 			return Interpolate(this, other, control);
 		}
@@ -727,11 +727,11 @@ namespace GCodeSender.NET
 		/// <returns>The distance between two Vectors</returns>
 		/// <implementation>
 		/// </implementation>
-		public static float Distance(Vector3 v1, Vector3 v2)
+		public static double Distance(Vector3 v1, Vector3 v2)
 		{
 			return
 			(
-				(float)Math.Sqrt
+				(double)Math.Sqrt
 				(
 					(v1.X - v2.X) * (v1.X - v2.X) +
 					(v1.Y - v2.Y) * (v1.Y - v2.Y) +
@@ -751,7 +751,7 @@ namespace GCodeSender.NET
 		/// Overload for Distance method, finds distance between this Vector3 and another
 		/// Uses the Distance(Vector3,Vector3) method to avoid code duplication
 		/// </implementation>
-		public float Distance(Vector3 other)
+		public double Distance(Vector3 other)
 		{
 			return Distance(this, other);
 		}
@@ -765,11 +765,11 @@ namespace GCodeSender.NET
 		/// <implementation>
 		/// </implementation>
 		/// <Acknowledgement>F.Hill, 2001, Computer Graphics using OpenGL, 2ed </Acknowledgement>
-		public static float Angle(Vector3 v1, Vector3 v2)
+		public static double Angle(Vector3 v1, Vector3 v2)
 		{
 			return
 			(
-				(float)Math.Acos
+				(double)Math.Acos
 					(
 						Normalize(v1).DotProduct(Normalize(v2))
 					)
@@ -785,7 +785,7 @@ namespace GCodeSender.NET
 		/// <see cref="Angle(Vector3, Vector3)"/>
 		/// Uses the Angle(Vector3,Vector3) method to avoid code duplication
 		/// </implementation>
-		public float Angle(Vector3 other)
+		public double Angle(Vector3 other)
 		{
 			return Angle(this, other);
 		}
@@ -859,11 +859,11 @@ namespace GCodeSender.NET
 		/// <param name="v1">The Vector3 to be rotated</param>
 		/// <param name="degree">The angle to rotate the Vector3 around in degrees</param>
 		/// <returns>Vector3 representing the rotation around the Y axis</returns>
-		public static Vector3 Yaw(Vector3 v1, float degree)
+		public static Vector3 Yaw(Vector3 v1, double degree)
 		{
-			float x = (v1.Z * (float)Math.Sin(degree)) + (v1.X * (float)Math.Cos(degree));
-			float y = v1.Y;
-			float z = (v1.Z * (float)Math.Cos(degree)) - (v1.X * (float)Math.Sin(degree));
+			double x = (v1.Z * (double)Math.Sin(degree)) + (v1.X * (double)Math.Cos(degree));
+			double y = v1.Y;
+			double z = (v1.Z * (double)Math.Cos(degree)) - (v1.X * (double)Math.Sin(degree));
 			return new Vector3(x, y, z);
 		}
 
@@ -874,10 +874,10 @@ namespace GCodeSender.NET
 		/// <param name="degree">The angle to rotate the Vector3 around in degrees</param>
 		/// <returns>Vector3 representing the rotation around the Y axis</returns>
 		/// <implementation>
-		/// <see cref="Yaw(Vector3, float)"/>
-		/// Uses function Yaw(Vector3, float) to avoid code duplication
+		/// <see cref="Yaw(Vector3, double)"/>
+		/// Uses function Yaw(Vector3, double) to avoid code duplication
 		/// </implementation>
-		public void Yaw(float degree)
+		public void Yaw(double degree)
 		{
 			this = Yaw(this, degree);
 		}
@@ -889,11 +889,11 @@ namespace GCodeSender.NET
 		/// <param name="v1">The Vector3 to be rotated</param>
 		/// <param name="degree">The angle to rotate the Vector3 around in degrees</param>
 		/// <returns>Vector3 representing the rotation around the X axis</returns>
-		public static Vector3 Pitch(Vector3 v1, float degree)
+		public static Vector3 Pitch(Vector3 v1, double degree)
 		{
-			float x = v1.X;
-			float y = (v1.Y * (float)Math.Cos(degree)) - (v1.Z * (float)Math.Sin(degree));
-			float z = (v1.Y * (float)Math.Sin(degree)) + (v1.Z * (float)Math.Cos(degree));
+			double x = v1.X;
+			double y = (v1.Y * (double)Math.Cos(degree)) - (v1.Z * (double)Math.Sin(degree));
+			double z = (v1.Y * (double)Math.Sin(degree)) + (v1.Z * (double)Math.Cos(degree));
 			return new Vector3(x, y, z);
 		}
 
@@ -903,11 +903,11 @@ namespace GCodeSender.NET
 		/// </summary>
 		/// <param name="degree">The angle to rotate the Vector3 around in degrees</param>
 		/// <returns>Vector3 representing the rotation around the X axis</returns>
-		/// <see cref="Pitch(Vector3, float)"/>
+		/// <see cref="Pitch(Vector3, double)"/>
 		/// <implementation>
-		/// Uses function Pitch(Vector3, float) to avoid code duplication
+		/// Uses function Pitch(Vector3, double) to avoid code duplication
 		/// </implementation>
-		public void Pitch(float degree)
+		public void Pitch(double degree)
 		{
 			this = Pitch(this, degree);
 		}
@@ -919,11 +919,11 @@ namespace GCodeSender.NET
 		/// <param name="v1">The Vector3 to be rotated</param>
 		/// <param name="degree">The angle to rotate the Vector3 around in degrees</param>
 		/// <returns>Vector3 representing the rotation around the Z axis</returns>
-		public static Vector3 Roll(Vector3 v1, float degree)
+		public static Vector3 Roll(Vector3 v1, double degree)
 		{
-			float x = (v1.X * (float)Math.Cos(degree)) - (v1.Y * (float)Math.Sin(degree));
-			float y = (v1.X * (float)Math.Sin(degree)) + (v1.Y * (float)Math.Cos(degree));
-			float z = v1.Z;
+			double x = (v1.X * (double)Math.Cos(degree)) - (v1.Y * (double)Math.Sin(degree));
+			double y = (v1.X * (double)Math.Sin(degree)) + (v1.Y * (double)Math.Cos(degree));
+			double z = v1.Z;
 			return new Vector3(x, y, z);
 		}
 
@@ -934,10 +934,10 @@ namespace GCodeSender.NET
 		/// <param name="degree">The angle to rotate the Vector3 around in degrees</param>
 		/// <returns>Vector3 representing the rotation around the Z axis</returns>
 		/// <implementation>
-		/// <see cref="Roll(Vector3, float)"/>
-		/// Uses function Roll(Vector3, float) to avoid code duplication
+		/// <see cref="Roll(Vector3, double)"/>
+		/// Uses function Roll(Vector3, double) to avoid code duplication
 		/// </implementation>
-		public void Roll(float degree)
+		public void Roll(double degree)
 		{
 			this = Roll(this, degree);
 		}
@@ -975,7 +975,7 @@ namespace GCodeSender.NET
 		/// <implementation>
 		/// An alternative interface to the magnitude property
 		/// </implementation>
-		public static float Abs(Vector3 v1)
+		public static double Abs(Vector3 v1)
 		{
 			return v1.Magnitude;
 		}
@@ -988,7 +988,7 @@ namespace GCodeSender.NET
 		/// <implementation>
 		/// An alternative interface to the magnitude property
 		/// </implementation>
-		public float Abs()
+		public double Abs()
 		{
 			return this.Magnitude;
 		}
@@ -1002,7 +1002,7 @@ namespace GCodeSender.NET
 		/// </summary>
 		/// <param name="v1">The vector whose scalar components to sum</param>
 		/// <returns>The sum of the Vectors X, Y and Z components</returns>
-		public static float SumComponents(Vector3 v1)
+		public static double SumComponents(Vector3 v1)
 		{
 			return (v1.X + v1.Y + v1.Z);
 		}
@@ -1015,7 +1015,7 @@ namespace GCodeSender.NET
 		/// <see cref="SumComponents(Vector3)"/>
 		/// The Components.SumComponents(Vector3) function has been used to prevent code duplication
 		/// </implementation>
-		public float SumComponents()
+		public double SumComponents()
 		{
 			return SumComponents(this);
 		}
@@ -1025,7 +1025,7 @@ namespace GCodeSender.NET
 		/// </summary>
 		/// <param name="v1">The vector whose scalar components to square and sum</param>
 		/// <returns>The sum of the Vectors X^2, Y^2 and Z^2 components</returns>
-		public static float SumComponentSqrs(Vector3 v1)
+		public static double SumComponentSqrs(Vector3 v1)
 		{
 			Vector3 v2 = SqrComponents(v1);
 			return v2.SumComponents();
@@ -1039,7 +1039,7 @@ namespace GCodeSender.NET
 		/// <see cref="SumComponentSqrs(Vector3)"/>
 		/// The Components.SumComponentSqrs(Vector3) function has been used to prevent code duplication
 		/// </implementation>
-		public float SumComponentSqrs()
+		public double SumComponentSqrs()
 		{
 			return SumComponentSqrs(this);
 		}
@@ -1050,15 +1050,15 @@ namespace GCodeSender.NET
 		/// <param name="v1">The vector whose scalar components to multiply by a power</param>
 		/// <param name="power">The power by which to multiply the components</param>
 		/// <returns>The multiplied Vector3</returns>
-		public static Vector3 PowComponents(Vector3 v1, float power)
+		public static Vector3 PowComponents(Vector3 v1, double power)
 		{
 			return
 			(
 				new Vector3
 					(
-						(float)Math.Pow(v1.X, power),
-						(float)Math.Pow(v1.Y, power),
-						(float)Math.Pow(v1.Z, power)
+						(double)Math.Pow(v1.X, power),
+						(double)Math.Pow(v1.Y, power),
+						(double)Math.Pow(v1.Z, power)
 					)
 			);
 		}
@@ -1069,10 +1069,10 @@ namespace GCodeSender.NET
 		/// <param name="power">The power by which to multiply the components</param>
 		/// <returns>The multiplied Vector3</returns>
 		/// <implementation>
-		/// <see cref="PowComponents(Vector3, float)"/>
-		/// The Components.PowComponents(Vector3, float) function has been used to prevent code duplication
+		/// <see cref="PowComponents(Vector3, double)"/>
+		/// The Components.PowComponents(Vector3, double) function has been used to prevent code duplication
 		/// </implementation>
-		public void PowComponents(float power)
+		public void PowComponents(double power)
 		{
 			this = PowComponents(this, power);
 		}
@@ -1088,9 +1088,9 @@ namespace GCodeSender.NET
 				(
 				new Vector3
 					(
-						(float)Math.Sqrt(v1.X),
-						(float)Math.Sqrt(v1.Y),
-						(float)Math.Sqrt(v1.Z)
+						(double)Math.Sqrt(v1.X),
+						(double)Math.Sqrt(v1.Y),
+						(double)Math.Sqrt(v1.Z)
 					)
 				);
 		}
@@ -1175,7 +1175,7 @@ namespace GCodeSender.NET
 		/// <summary>
 		/// Textual description of the Vector3
 		/// </summary>
-		/// <param name="format">Formatting string: 'x','y','z' or '' followed by standard numeric format string characters valid for a float precision floating point</param>
+		/// <param name="format">Formatting string: 'x','y','z' or '' followed by standard numeric format string characters valid for a double precision doubleing point</param>
 		/// <param name="formatProvider">The culture specific fromatting provider</param>
 		/// <returns>Text (String) representing the vector</returns>
 		public string ToString(string format, IFormatProvider formatProvider)
@@ -1536,22 +1536,22 @@ namespace GCodeSender.NET
 		/// <summary>
 		/// The tolerence used when determining the equality of two vectors 
 		/// </summary>
-		public const float EqualityTolerence = float.Epsilon;
+		public const double EqualityTolerence = double.Epsilon;
 
 		/// <summary>
-		/// The smallest vector possible (based on the float precision floating point structure)
+		/// The smallest vector possible (based on the double precision doubleing point structure)
 		/// </summary>
-		public static readonly Vector3 MinValue = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+		public static readonly Vector3 MinValue = new Vector3(double.MinValue, double.MinValue, double.MinValue);
 
 		/// <summary>
-		/// The largest vector possible (based on the float precision floating point structure)
+		/// The largest vector possible (based on the double precision doubleing point structure)
 		/// </summary>
-		public static readonly Vector3 MaxValue = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+		public static readonly Vector3 MaxValue = new Vector3(double.MaxValue, double.MaxValue, double.MaxValue);
 
 		/// <summary>
-		/// The smallest positive (non-zero) vector possible (based on the float precision floating point structure)
+		/// The smallest positive (non-zero) vector possible (based on the double precision doubleing point structure)
 		/// </summary>
-		public static readonly Vector3 Epsilon = new Vector3(float.Epsilon, float.Epsilon, float.Epsilon);
+		public static readonly Vector3 Epsilon = new Vector3(double.Epsilon, double.Epsilon, double.Epsilon);
 
 		#endregion
 	}

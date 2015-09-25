@@ -24,7 +24,7 @@
 			return code;
 		}
 
-		public override float Length
+		public override double Length
 		{
 			get
 			{

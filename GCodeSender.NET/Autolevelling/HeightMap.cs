@@ -8,28 +8,28 @@ using System.Threading.Tasks;
 
 namespace GCodeSender.NET
 {
-	public class HeightMap
+	class HeightMap
 	{
 		const string FileHeader = "HeightMapV2.0 Do not modify!";
 
-		private float[,] Value;
+		private double[,] Value;
 		public bool[,] HasValue;
 
 		public int SizeX { get; private set; }
 		public int SizeY { get; private set; }
 
-		public float GridSize { get; private set; }
+		public double GridSize { get; private set; }
 
-		public float OffsetX { get; private set; }
-		public float OffsetY { get; private set; }
+		public double OffsetX { get; private set; }
+		public double OffsetY { get; private set; }
 
-		public float MaxZ { get; private set; }
-		public float MinZ { get; private set; }
+		public double MaxZ { get; private set; }
+		public double MinZ { get; private set; }
 
-		public float MinX { get { return OffsetX; } }
-		public float MinY { get { return OffsetY; } }
-		public float MaxX { get { return (SizeX - 1) * GridSize + OffsetX; } }
-		public float MaxY { get { return (SizeY - 1) * GridSize + OffsetY; } }
+		public double MinX { get { return OffsetX; } }
+		public double MinY { get { return OffsetY; } }
+		public double MaxX { get { return (SizeX - 1) * GridSize + OffsetX; } }
+		public double MaxY { get { return (SizeY - 1) * GridSize + OffsetY; } }
 
 		public Bounds Dimensions { get { return new Bounds(MinX, MaxX, MinY, MaxY); } }
 
@@ -37,9 +37,9 @@ namespace GCodeSender.NET
 
 		public Queue<Point> NotProbed { get; private set; }
 
-		public HeightMap(int sizeX, int sizeY, float gridSize, float offsetX, float offsetY)
+		public HeightMap(int sizeX, int sizeY, double gridSize, double offsetX, double offsetY)
 		{
-			Value = new float[sizeX, sizeY];
+			Value = new double[sizeX, sizeY];
 			HasValue = new bool[sizeX, sizeY];
 
 			SizeX = sizeX;
@@ -50,8 +50,8 @@ namespace GCodeSender.NET
 			OffsetX = offsetX;
 			OffsetY = offsetY;
 
-			MaxZ = float.MinValue;
-			MinZ = float.MaxValue;
+			MaxZ = double.MinValue;
+			MinZ = double.MaxValue;
 
 			NotProbed = new Queue<Point>(SizeX * SizeY);
 
@@ -84,22 +84,22 @@ namespace GCodeSender.NET
 			SizeX = file.ReadInt32();
 			SizeY = file.ReadInt32();
 
-			Value = new float[SizeX, SizeY];
+			Value = new double[SizeX, SizeY];
 			HasValue = new bool[SizeX, SizeY];
 
-			GridSize = file.ReadSingle();
+			GridSize = file.ReadDouble();
 
 			OffsetX = file.ReadSingle();
 			OffsetY = file.ReadSingle();
 
-			MaxZ = float.MinValue;
-			MinZ = float.MaxValue;
+			MaxZ = double.MinValue;
+			MinZ = double.MaxValue;
 
 			for (int x = 0; x < SizeX; x++)
 			{
 				for (int y = 0; y < SizeY; y++)
 				{
-					float point = file.ReadSingle();
+					double point = file.ReadSingle();
 
 					if (HasValue[x, y] = file.ReadBoolean())
 					{
@@ -152,7 +152,7 @@ namespace GCodeSender.NET
 			file.Close();
 		}
 
-		public float this[int x, int y]
+		public double this[int x, int y]
 		{
 			get
 			{
@@ -175,19 +175,19 @@ namespace GCodeSender.NET
 			}
 		}
 
-		public PointF GetCoordinates(Point point)
+		public PointD GetCoordinates(Point point)
 		{
-			return new PointF(point.X * GridSize + OffsetX, point.Y * GridSize + OffsetY);
+			return new PointD(point.X * GridSize + OffsetX, point.Y * GridSize + OffsetY);
 		}
 
-		public PointF GetCoordinates(int x, int y)
+		public PointD GetCoordinates(int x, int y)
 		{
-			return new PointF(x * GridSize + OffsetX, y * GridSize + OffsetY);
+			return new PointD(x * GridSize + OffsetX, y * GridSize + OffsetY);
 		}
 
-		public float HighestNeighbour(int x, int y)
+		public double HighestNeighbour(int x, int y)
 		{
-			float max = float.MinValue;
+			double max = double.MinValue;
 
 			if (x > 0 && HasValue[x - 1, y])
 			{
@@ -212,7 +212,7 @@ namespace GCodeSender.NET
 			return max;
 		}
 
-		public float GetHeightAt(float x, float y)
+		public double GetHeightAt(double x, double y)
 		{
 			x = (x - OffsetX) / GridSize;
 			y = (y - OffsetY) / GridSize;
@@ -223,22 +223,22 @@ namespace GCodeSender.NET
 			int iHX = (int)Math.Ceiling(x);	//upper integer part
 			int iHY = (int)Math.Ceiling(y);
 
-			float fX = x - iLX;				//fractional part
-			float fY = y - iLY;
+			double fX = x - iLX;				//fractional part
+			double fY = y - iLY;
 
 
 			/*		WRONG (probably)
-			float linUpper = this[iHX, iHY] * fX + this[iHX, iLY] * (1 - fX);		//linear immediates
-			float linLower = this[iLX, iHY] * fX + this[iLX, iLY] * (1 - fX);
+			double linUpper = this[iHX, iHY] * fX + this[iHX, iLY] * (1 - fX);		//linear immediates
+			double linLower = this[iLX, iHY] * fX + this[iLX, iLY] * (1 - fX);
 			*/
 
-			float linUpper = this[iHX, iHY] * fX + this[iLX, iHY] * (1 - fX);		//linear immediates
-			float linLower = this[iHX, iLY] * fX + this[iLX, iLY] * (1 - fX);
+			double linUpper = this[iHX, iHY] * fX + this[iLX, iHY] * (1 - fX);		//linear immediates
+			double linLower = this[iHX, iLY] * fX + this[iLX, iLY] * (1 - fX);
 
 			return linUpper * fY + linLower * (1 - fY);		//bilinear result
 		}
 
-		public float GetHeightAt(PointF position)
+		public double GetHeightAt(PointD position)
 		{
 			return GetHeightAt(position.X, position.Y);
 		}

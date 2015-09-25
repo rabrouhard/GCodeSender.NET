@@ -9,7 +9,7 @@ namespace GCodeSender.NET
 	abstract class Movement : GCodeCommand
 	{
 		public Vector3 Start, End;
-		public float? FeedRate = null;
+		public double? FeedRate = null;
 
 		public Movement(Vector3 start, Vector3 end)
 		{
@@ -17,7 +17,7 @@ namespace GCodeSender.NET
 			End = end;
 		}
 
-		public abstract float Length { get; }
+		public abstract double Length { get; }
 
 		public Vector3 Incremental
 		{

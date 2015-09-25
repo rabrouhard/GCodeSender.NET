@@ -42,11 +42,11 @@ namespace GCodeSender.NET
 
 			int Command = int.Parse(matches[0].Groups[2].Value, inv);
 
-			float? X = null, Y = null, Z = null, I = null, J = null, F = null, R = null;
+			double? X = null, Y = null, Z = null, I = null, J = null, F = null, R = null;
 
 			for (int index = 1; index < matches.Count; index++)
 			{
-				float value = float.Parse(matches[index].Groups[2].Value, inv);
+				double value = double.Parse(matches[index].Groups[2].Value, inv);
 
 				if (Units == DistanceUnit.Inches)
 					value *= 25.4f;
@@ -67,17 +67,17 @@ namespace GCodeSender.NET
 
 			if (X.HasValue)
 			{
-				EndPosition.X = (DistanceMode == ParseDistanceMode.Absolute) ? (float)X : EndPosition.X + (float)X;
+				EndPosition.X = (DistanceMode == ParseDistanceMode.Absolute) ? (double)X : EndPosition.X + (double)X;
 			}
 
 			if (Y.HasValue)
 			{
-				EndPosition.Y = (DistanceMode == ParseDistanceMode.Absolute) ? (float)Y : EndPosition.Y + (float)Y;
+				EndPosition.Y = (DistanceMode == ParseDistanceMode.Absolute) ? (double)Y : EndPosition.Y + (double)Y;
 			}
 
 			if (Z.HasValue)
 			{
-				EndPosition.Z = (DistanceMode == ParseDistanceMode.Absolute) ? (float)Z : EndPosition.Z + (float)Z;
+				EndPosition.Z = (DistanceMode == ParseDistanceMode.Absolute) ? (double)Z : EndPosition.Z + (double)Z;
 			}
 
 			switch (Command)
@@ -112,12 +112,12 @@ namespace GCodeSender.NET
 
 						if (I.HasValue)
 						{
-							center.X = (ArcDistanceMode == ParseDistanceMode.Absolute) ? (float)I : Position.X + (float)I;
+							center.X = (ArcDistanceMode == ParseDistanceMode.Absolute) ? (double)I : Position.X + (double)I;
 						}
 
 						if (J.HasValue)
 						{
-							center.Y = (ArcDistanceMode == ParseDistanceMode.Absolute) ? (float)J : Position.Y + (float)J;
+							center.Y = (ArcDistanceMode == ParseDistanceMode.Absolute) ? (double)J : Position.Y + (double)J;
 						}
 
 						if (R.HasValue)
@@ -125,7 +125,7 @@ namespace GCodeSender.NET
 							Vector3 Parallel = EndPosition - Position;
 							Vector3 Perpendicular = Parallel.CrossProduct(new Vector3(0, 0, 1));
 
-							float PerpLength = (float)Math.Sqrt(((float)R * (float)R) - (Parallel.Magnitude * Parallel.Magnitude / 4));
+							double PerpLength = Math.Sqrt(((double)R * (double)R) - (Parallel.Magnitude * Parallel.Magnitude / 4));
 
 							if (Command == 3 ^ R < 0)
 								PerpLength = -PerpLength;

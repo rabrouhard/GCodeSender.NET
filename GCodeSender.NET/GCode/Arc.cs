@@ -49,56 +49,56 @@ namespace GCodeSender.NET
 			return code;
 		}
 
-		public float StartAngle
+		public double StartAngle
 		{
 			get
 			{
 				Vector3 relStart = Start - Center;
-				float a = (float)Math.Atan2(relStart.Y, relStart.X);
-				return a >= 0 ? a : 2 * (float)Math.PI + a;
+				double a = Math.Atan2(relStart.Y, relStart.X);
+				return a >= 0 ? a : 2 * Math.PI + a;
 			}
 		}
 
-		public float EndAngle
+		public double EndAngle
 		{
 			get
 			{
 				Vector3 relEnd = End - Center;
-				float a = (float)Math.Atan2(relEnd.Y, relEnd.X);
-				return a >= 0 ? a : 2 * (float)Math.PI + a;
+				double a = Math.Atan2(relEnd.Y, relEnd.X);
+				return a >= 0 ? a : 2 * Math.PI + a;
 			}
 		}
 
-		public float Radius
+		public double Radius
 		{
 			// get average between both radii
 			get 
 			{
-				return (float)(
+				return (
 					Math.Sqrt(Math.Pow(Start.X - Center.X, 2) + Math.Pow(Start.Y - Center.Y, 2)) + 
 					Math.Sqrt(Math.Pow(End.X - Center.X, 2) + Math.Pow(End.Y - Center.Y, 2))
 					) / 2;
 			}
 		}
 
-		public override float Length
+		public override double Length
 		{
 			get
 			{
-				float stretch = StartAngle - EndAngle;
+				double stretch = StartAngle - EndAngle;
 
 				if (stretch < 0)
-					stretch += 2 * (float)Math.PI;
+					stretch += 2 * Math.PI;
 
 				if(Direction == ArcDirection.CCW)
 				{
-					stretch = 2 * (float)Math.PI - stretch;
+					stretch = 2 * Math.PI - stretch;
 				}
 
-				float circumference = stretch * Radius;
-				float height = End.X - Start.X;
+				double circumference = stretch * Radius;
+				double height = End.X - Start.X;
 
-				return (float)Math.Sqrt(circumference * circumference + height * height);
+				return Math.Sqrt(circumference * circumference + height * height);
 			}
 		}
 	}

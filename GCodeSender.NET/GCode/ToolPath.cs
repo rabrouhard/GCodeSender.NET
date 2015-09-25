@@ -41,9 +41,9 @@ namespace GCodeSender.NET
 			return b;
 		}
 
-		public float GetTravelDistance()
+		public double GetTravelDistance()
 		{
-			float d = 0;
+			double d = 0;
 
 			foreach (var Command in this)
 			{
@@ -91,7 +91,7 @@ namespace GCodeSender.NET
 
 							for (int x = 1; x <= divisions; x++)
 							{
-								Vector3 end = s.Start.Interpolate(s.End, (float)x / (float)divisions);
+								Vector3 end = s.Start.Interpolate(s.End, (double)x / (double)divisions);
 								end.Z += map.GetHeightAt(end.X, end.Y);
 								Straight st = new Straight(pos, end, false);
 								if (x == 1)
@@ -107,31 +107,31 @@ namespace GCodeSender.NET
 
 						Vector3 pos = a.Start;
 
-						float stretch = a.StartAngle - a.EndAngle;
+						double stretch = a.StartAngle - a.EndAngle;
 
 						if (stretch <= 0)
-							stretch += 2 * (float)Math.PI;
+							stretch += 2 * Math.PI;
 
 						if (a.Direction == ArcDirection.CCW)
 						{
-							stretch = 2 * (float)Math.PI - stretch;
+							stretch = 2 * Math.PI - stretch;
 						}
 
 						if (stretch <= 0)
-							stretch += 2 * (float)Math.PI;
+							stretch += 2 * Math.PI;
 
 						for (int x = 1; x <= divisions; x++)
 						{
 							Vector3 end = new Vector3(a.Radius, 0, 0);
 
 							if (a.Direction != ArcDirection.CCW)
-								end.Roll(a.StartAngle + stretch * (float)x / (float)divisions);
+								end.Roll(a.StartAngle + stretch * (double)x / (double)divisions);
 							else
-								end.Roll(a.StartAngle - stretch * (float)x / (float)divisions);
+								end.Roll(a.StartAngle - stretch * (double)x / (double)divisions);
 
 							end += a.Center;
 
-							end.Z = a.Start.Z + (a.End.Z - a.Start.Z) * (float)x / (float)divisions;
+							end.Z = a.Start.Z + (a.End.Z - a.Start.Z) * (double)x / (double)divisions;
 
 							end.Z += map.GetHeightAt(end.X, end.Y);
 

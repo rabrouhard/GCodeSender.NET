@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Autolevelling\PointD.cs" />
     <Compile Include="Communication\ToolPathProvider.cs" />
     <Compile Include="Communication\ManualGCodeProvider.cs" />
     <Compile Include="Communication\GCodeStreamer.cs" />

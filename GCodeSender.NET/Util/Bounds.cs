@@ -8,13 +8,13 @@ namespace GCodeSender.NET
 {
 	public class Bounds
 	{
-		public float MinX { get; set; }
-		public float MaxX { get; set; }
-		public float MinY { get; set; }
-		public float MaxY { get; set; }
+		public double MinX { get; set; }
+		public double MaxX { get; set; }
+		public double MinY { get; set; }
+		public double MaxY { get; set; }
 
-		public float SizeX { get { return MaxX - MinX; } }
-		public float SizeY { get { return MaxY - MinY; } }
+		public double SizeX { get { return MaxX - MinX; } }
+		public double SizeY { get { return MaxY - MinY; } }
 
 		public Bounds()
 		{
@@ -24,7 +24,7 @@ namespace GCodeSender.NET
 			MaxY = 0;
 		}
 
-		public Bounds(float minX, float maxX, float minY, float maxY)
+		public Bounds(double minX, double maxX, double minY, double maxY)
 		{
 			MinX = minX;
 			MaxX = maxX;
@@ -54,7 +54,7 @@ namespace GCodeSender.NET
 		/// </summary>
 		/// <param name="x">X coordinate of the point</param>
 		/// <param name="y">Y coordinate of the point</param>
-		public void ExpandTo(float x, float y)
+		public void ExpandTo(double x, double y)
 		{
 			if (x < MinX)
 				MinX = x;
