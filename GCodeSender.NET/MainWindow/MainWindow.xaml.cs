@@ -26,18 +26,18 @@ namespace GCodeSender.NET
 			Console.WriteLine("Initializing Main Window");
 			InitializeComponent();
 			Connection.Connected += Connection_Connected;
-			Connection.Connected += ConnectionStatusChanged;
+			Connection.Connected += GCodeProviderChanged;
 			Connection.Disconnected += Connection_Disconnected;
-			Connection.Disconnected += ConnectionStatusChanged;
+			Connection.Disconnected += GCodeProviderChanged;
 
-			GCodeStreamer.GCodeProviderChanged += ConnectionStatusChanged;
+			GCodeStreamer.GCodeProviderChanged += GCodeProviderChanged;
 			Console.WriteLine("Initialized Main Window");
 		}
 
-		private void ConnectionStatusChanged()
+		private void GCodeProviderChanged()
 		{
 			tabItemManualMode.IsEnabled = Connection.IsConnected && GCodeStreamer.IsManualMode;
-			tabItemFileMode.IsEnabled = Connection.IsConnected && (GCodeStreamer.IsManualMode  /*|| GCodeStreamer.IsFileMode*/);
+			groupBoxFileControls.IsEnabled = Connection.IsConnected;
 
 			if (!((TabItem)tabControl.SelectedItem).IsEnabled)
 				tabControl.SelectedItem = tabItemStatus;

@@ -63,10 +63,20 @@
     <Compile Include="Communication\FileGCodeProvider.cs" />
     <Compile Include="Communication\ManualGCodeProvider.cs" />
     <Compile Include="Communication\GCodeStreamer.cs" />
+    <Compile Include="GCode\Arc.cs" />
+    <Compile Include="GCode\GCodeCommand.cs" />
+    <Compile Include="GCode\GCodeParser.cs" />
+    <Compile Include="GCode\Movement.cs" />
+    <Compile Include="GCode\OtherCode.cs" />
+    <Compile Include="GCode\Straight.cs" />
+    <Compile Include="GCode\ToolPath.cs" />
+    <Compile Include="GCode\Vector3.cs" />
     <Compile Include="MainWindow\MainWindow.FileTab.cs" />
     <Compile Include="MainWindow\MainWindow.ManualTab.cs" />
     <Compile Include="MainWindow\MainWindow.Menu.cs" />
     <Compile Include="MainWindow\MainWindow.Settings.cs" />
+    <Compile Include="Autolevelling\HeightMap.cs" />
+    <Compile Include="Util\Bounds.cs" />
     <Compile Include="Util\Util.cs" />
     <Compile Include="Util\GrblErrorProvider.cs" />
     <Page Include="MainWindow\MainWindow.xaml">
@@ -143,6 +153,7 @@
     <Resource Include="Resources\Restart.png" />
     <Resource Include="Resources\Stop.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

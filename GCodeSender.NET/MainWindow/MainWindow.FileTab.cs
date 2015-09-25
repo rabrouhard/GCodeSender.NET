@@ -9,12 +9,11 @@ namespace GCodeSender.NET
 {
 	partial class MainWindow
 	{
+		private FileGCodeProvider FileProvider = new FileGCodeProvider();
+
 		private void buttonFileStart_Click(object sender, RoutedEventArgs e)
 		{
-			//testing
-			FileGCodeProvider x = new FileGCodeProvider(@"D:\Users\Martin\Desktop\box_logo.tap");
-            GCodeStreamer.SetGCodeProvider(x);
-			x.Start();
+
 		}
 
 		private void buttonFilePause_Click(object sender, RoutedEventArgs e)

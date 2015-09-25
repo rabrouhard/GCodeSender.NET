@@ -17,7 +17,6 @@
             <RowDefinition Height="3"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" MinWidth="200"/>
             <ColumnDefinition Width="3"/>
@@ -180,7 +179,7 @@
                     </GroupBox>
                 </DockPanel>
             </TabItem>
-            <TabItem Name="tabItemFileMode" IsEnabled="False">
+            <TabItem Name="tabItemFileMode">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="../Resources/FileMode.png" Height="25" Width="25"/>
@@ -188,7 +187,7 @@
                     </StackPanel>
                 </TabItem.Header>
                 <DockPanel>
-                    <GroupBox Width="170" Margin="10">
+                    <GroupBox Name="groupBoxFileControls" Width="170" Margin="10" IsEnabled="False">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="../Resources/Play.png" Height="25" Width="25"/>

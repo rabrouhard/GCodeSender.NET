@@ -15,15 +15,14 @@ namespace GCodeSender.NET
 
 		public string Path;
 
-		public FileGCodeProvider(string path)
+		public FileGCodeProvider()
 		{
-			this.Path = path;
-			Reload();
+
 		}
 
 		public void Reload()
 		{
-			if (!IsRunning)
+			if (Path != null && !IsRunning)
 			{
 				foreach (string line in File.ReadAllLines(Path))
 				{
