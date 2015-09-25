@@ -9,7 +9,7 @@ namespace GCodeSender.NET
 {
 	partial class MainWindow
 	{
-		private FileGCodeProvider FileProvider = new FileGCodeProvider();
+		private ToolPathProvider FileProvider;
 
 		private void buttonFileStart_Click(object sender, RoutedEventArgs e)
 		{

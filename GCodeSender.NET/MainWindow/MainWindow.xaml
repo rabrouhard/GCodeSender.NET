@@ -216,13 +216,13 @@
                                 <Image Source="../Resources/Stop.png" Height="20" Width="20" Margin="5"/>
                             </Button>
                             <Button Margin="5" Grid.Row="3" Click="buttonFileReload_Click">
-                                <Image Source="../Resources/Restart.png" Height="20" Width="20" Margin="5"/>
+                                <Image Source="../Resources/Restart.png" Height="20" Width="20" Margin="5" ToolTip="Does not reload file!"/>
                             </Button>
 
                             <Label Content="Start / Continue" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             <Label Content="Pause" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             <Label Content="Stop" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <Label Content="Reload File" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <Label Content="Restart" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Margin="0, 10, 10, 10">

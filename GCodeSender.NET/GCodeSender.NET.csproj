@@ -60,7 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Communication\FileGCodeProvider.cs" />
+    <Compile Include="Communication\ToolPathProvider.cs" />
     <Compile Include="Communication\ManualGCodeProvider.cs" />
     <Compile Include="Communication\GCodeStreamer.cs" />
     <Compile Include="GCode\Arc.cs" />
