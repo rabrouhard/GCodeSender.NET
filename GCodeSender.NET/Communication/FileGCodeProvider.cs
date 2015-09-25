@@ -37,7 +37,7 @@ namespace GCodeSender.NET
 					cleanLine = cleanLine.Replace(" ", "");
 
 					if (!string.IsNullOrWhiteSpace(cleanLine))
-						Lines.Enqueue(line);
+						Lines.Enqueue(cleanLine);
 				}
 			}
 		}
@@ -72,7 +72,6 @@ namespace GCodeSender.NET
 		public void Start()
 		{
 			isPaused = false;
-			LineAdded();
 		}
 	}
 }

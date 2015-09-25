@@ -67,7 +67,7 @@ namespace GCodeSender.NET
 		public delegate void LineReceivedDelegate(string line);
 		public static event LineReceivedDelegate LineReceived;
 
-		private static async void ReceiveTimer_Elapsed(object sender, ElapsedEventArgs e)
+		public static async void ReceiveTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			if (!ConnectionStream.CanRead)
 			{
@@ -134,7 +134,7 @@ namespace GCodeSender.NET
 
 			IsConnected = true;
 
-			ReceiveTimer.Start();
+			//ReceiveTimer.Start();
 		}
 
 		public static bool ConnectNetwork(string address)
@@ -198,6 +198,8 @@ namespace GCodeSender.NET
 
 			ConnectionStream.Write(lineBin, 0, lineBin.Length);
 			ConnectionStream.Flush();
+
+			Console.Write(line);
 		}
 
 

@@ -32,6 +32,7 @@ namespace GCodeSender.NET
 			Connection.LineReceived += Connection_LineReceived;
 
 			GCodeStreamer.GCodeProviderChanged += ConnectionStatusChanged;
+			
 		}
 
 		private void ConnectionStatusChanged()

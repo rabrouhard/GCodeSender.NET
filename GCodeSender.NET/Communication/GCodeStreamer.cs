@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace GCodeSender.NET
 {
 	static class GCodeStreamer
 	{
-		public static event Action GCodeProviderChanged;
-
 		public static Queue<string> ActiveCommands { get; } = new Queue<string>();
+		private static Timer UpdateTimer;
 
-
+		public static event Action GCodeProviderChanged;
 		public static ManualGCodeProvider ManualProvider { get; } = new ManualGCodeProvider();
 
 		private static IGCodeProvider _gCodeProvider = ManualProvider;
@@ -39,10 +39,22 @@ namespace GCodeSender.NET
 
 		static GCodeStreamer()
 		{
+			Console.WriteLine("Initializing GCode Streamer ...");
+
 			Connection.Disconnected += Reset;
+
+			UpdateTimer = new Timer() { AutoReset = true };
+			UpdateTimer.Interval = Properties.Settings.Default.ReceiveTimerInterval;
+			UpdateTimer.Elapsed += Update;
+
+			Connection.Disconnected += UpdateTimer.Stop;
+			Connection.Connected += UpdateTimer.Start;
+
 			Connection.LineReceived += Connection_LineReceived;
 
-			ManualProvider.LineAdded += Update;
+
+
+			Console.WriteLine("Initialized GCode Streamer");
 		}
 
 		/// <summary>
@@ -82,17 +94,25 @@ namespace GCodeSender.NET
 				return false;
 
 			GCodeProvider = newProvider;
-			newProvider.LineAdded += Update;
 
 			return true;
 		}
 
-		static void Update()
+		static void Update(object sender, ElapsedEventArgs e)
 		{
 			while (true)
 			{
+				if(!Connection.IsConnected)
+				{
+					UpdateTimer.Stop();
+					return;
+				}
+
 				if (!IsManualMode && !GCodeProvider.IsRunning)
+				{
 					Stop();
+					return;
+				}
 
 				if (!GCodeProvider.HasLine)
 					return;
@@ -155,7 +175,6 @@ namespace GCodeSender.NET
 				Stop();
 				App.Message(line);
 			}
-			Update();
 		}
 	}
 }
