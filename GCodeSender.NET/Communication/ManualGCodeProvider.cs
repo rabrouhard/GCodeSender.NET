@@ -25,9 +25,7 @@ namespace GCodeSender.NET
 				return false;
 			}
 		}
-
-		public event Action LineAdded;
-
+		
 		public int PeekLineLength()
 		{
 			return CommandQueue.Peek().Length;
@@ -46,8 +44,6 @@ namespace GCodeSender.NET
 		public void SendLine(string line)
 		{
 			CommandQueue.Enqueue(line);
-			
-			LineAdded();
 		}
 	}
 }

@@ -42,12 +42,9 @@ namespace GCodeSender.NET
 			}
 		}
 
-
 		public bool HasLine { get { return Lines.Count > 0 && (!isPaused); } }
 
 		public bool IsRunning { get { return Lines.Count > 0; } }
-
-		public event Action LineAdded;
 
 		public string GetLine()
 		{

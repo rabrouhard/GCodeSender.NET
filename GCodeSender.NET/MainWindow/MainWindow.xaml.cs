@@ -23,16 +23,15 @@ namespace GCodeSender.NET
 	{
 		public MainWindow()
 		{
+			Console.WriteLine("Initializing Main Window");
 			InitializeComponent();
 			Connection.Connected += Connection_Connected;
 			Connection.Connected += ConnectionStatusChanged;
 			Connection.Disconnected += Connection_Disconnected;
 			Connection.Disconnected += ConnectionStatusChanged;
 
-			Connection.LineReceived += Connection_LineReceived;
-
 			GCodeStreamer.GCodeProviderChanged += ConnectionStatusChanged;
-			
+			Console.WriteLine("Initialized Main Window");
 		}
 
 		private void ConnectionStatusChanged()
@@ -42,11 +41,6 @@ namespace GCodeSender.NET
 
 			if (!((TabItem)tabControl.SelectedItem).IsEnabled)
 				tabControl.SelectedItem = tabItemStatus;
-		}
-
-		private void Connection_LineReceived(string line)
-		{
-			Console.WriteLine(line);
 		}
 
 		private void Connection_Disconnected()

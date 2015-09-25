@@ -65,6 +65,7 @@
     <Compile Include="Communication\GCodeStreamer.cs" />
     <Compile Include="MainWindow\MainWindow.FileTab.cs" />
     <Compile Include="MainWindow\MainWindow.ManualTab.cs" />
+    <Compile Include="MainWindow\MainWindow.Menu.cs" />
     <Compile Include="MainWindow\MainWindow.Settings.cs" />
     <Compile Include="Util\Util.cs" />
     <Compile Include="Util\GrblErrorProvider.cs" />

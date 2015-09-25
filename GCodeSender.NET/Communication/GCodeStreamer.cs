@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace GCodeSender.NET
 	static class GCodeStreamer
 	{
 		public static Queue<string> ActiveCommands { get; } = new Queue<string>();
-		private static Timer UpdateTimer;
+		private static BackgroundWorker streamWorker;
 
 		public static event Action GCodeProviderChanged;
 		public static ManualGCodeProvider ManualProvider { get; } = new ManualGCodeProvider();
@@ -33,6 +34,8 @@ namespace GCodeSender.NET
 			}
 		}
 
+		public static event Action<string> LineReceived;
+
 		public static bool IsManualMode { get { return ManualProvider.Equals(GCodeProvider); } }
 
 		private static int CurrentGRBLBuffer = 0;
@@ -41,38 +44,53 @@ namespace GCodeSender.NET
 		{
 			Console.WriteLine("Initializing GCode Streamer ...");
 
-			Connection.Disconnected += Reset;
-
-			UpdateTimer = new Timer() { AutoReset = true };
-			UpdateTimer.Interval = Properties.Settings.Default.ReceiveTimerInterval;
-			UpdateTimer.Elapsed += Update;
-
-			Connection.Disconnected += UpdateTimer.Stop;
-			Connection.Connected += UpdateTimer.Start;
-
-			Connection.LineReceived += Connection_LineReceived;
+			LineReceived += (line)=> { };
 
 
+			streamWorker = new BackgroundWorker() { WorkerReportsProgress = true };
+			streamWorker.DoWork += StreamWorker_DoWork;
+			streamWorker.ProgressChanged += StreamWorker_ProgressChanged;
+			Connection.Connected += streamWorker.RunWorkerAsync;
 
 			Console.WriteLine("Initialized GCode Streamer");
 		}
 
-		/// <summary>
-		/// Resets GCodeStreamer, used for cleanup or when irresponsive
-		/// </summary>
-		public static void Reset()
+		private static void StreamWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
-			ActiveCommands.Clear();
-			CurrentGRBLBuffer = 0;
-
-			GCodeProvider.Stop();
-			GCodeProvider = ManualProvider;
+			LineReceived((string)e.UserState);
 		}
 
-		public static void Stop()
+		private static void StreamWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			GCodeProvider.Stop();
-			GCodeProvider = ManualProvider;
+			while (true)
+			{
+				Task<string> receiveTask = Connection.ConnectionReader.ReadLineAsync();	//won't raise exception on disconnect, will set exception prop and IsCompleted prop
+
+				while (!receiveTask.IsCompleted)
+				{
+					if (GCodeProvider.HasLine && (CurrentGRBLBuffer + GCodeProvider.PeekLineLength() + 1 < Properties.Settings.Default.GrblBufferSize))
+					{
+						string line = GCodeProvider.GetLine();
+
+						CurrentGRBLBuffer += line.Length + 1;
+						ActiveCommands.Enqueue(line);
+
+						Connection.ConnectionWriter.WriteLine(line);
+						Console.WriteLine($"sent {line}");
+					}
+
+					System.Threading.Thread.Sleep(25);
+				}
+
+				if (receiveTask.Exception == null)
+				{
+					string receivedLine = receiveTask.Result;
+					Console.WriteLine($"received {receivedLine}");
+
+					if (!string.IsNullOrWhiteSpace(receivedLine) && !HandleReceivedLine(receivedLine))
+						streamWorker.ReportProgress(0, receivedLine);
+				}
+			}
 		}
 
 		public static bool IsActive
@@ -83,11 +101,6 @@ namespace GCodeSender.NET
 			}
 		}
 
-		/// <summary>
-		/// Sets the source for streaming GCode to the Connection
-		/// </summary>
-		/// <param name="newProvider">The new GCodeProvider</param>
-		/// <returns>Success</returns>
 		public static bool SetGCodeProvider(IGCodeProvider newProvider)
 		{
 			if (IsActive)
@@ -98,42 +111,8 @@ namespace GCodeSender.NET
 			return true;
 		}
 
-		static void Update(object sender, ElapsedEventArgs e)
-		{
-			while (true)
-			{
-				if(!Connection.IsConnected)
-				{
-					UpdateTimer.Stop();
-					return;
-				}
 
-				if (!IsManualMode && !GCodeProvider.IsRunning)
-				{
-					Stop();
-					return;
-				}
-
-				if (!GCodeProvider.HasLine)
-					return;
-
-				if (CurrentGRBLBuffer + GCodeProvider.PeekLineLength() + 1 > Properties.Settings.Default.GrblBufferSize)    //account for lf
-					return;
-
-				string line = GCodeProvider.GetLine();
-
-				if (string.IsNullOrWhiteSpace(line))
-					continue;
-
-				CurrentGRBLBuffer += line.Length + 1;
-
-				ActiveCommands.Enqueue(line);
-
-				Connection.WriteLine(line);
-			}
-		}
-
-		private static void Connection_LineReceived(string line)
+		private static bool HandleReceivedLine(string line)
 		{
 			if (line.StartsWith("ok"))
 			{
@@ -141,13 +120,23 @@ namespace GCodeSender.NET
 					CurrentGRBLBuffer -= ActiveCommands.Dequeue().Length + 1;
 				else
 					Console.Error.WriteLine("Received ok without active command");
+
+				return true;
 			}
 			else if (line.StartsWith("error"))
 			{
+				string activeCommand;
+
 				if (ActiveCommands.Count > 0)
-					CurrentGRBLBuffer -= ActiveCommands.Dequeue().Length + 1;
+				{
+					activeCommand = ActiveCommands.Dequeue();
+					CurrentGRBLBuffer -= activeCommand.Length + 1;
+				}
 				else
+				{
 					Console.Error.WriteLine("Received ok without active command");
+					activeCommand = "no active command";
+				}
 
 				if (line.StartsWith(Properties.Resources.errorInvalidGCode))
 				{
@@ -157,7 +146,7 @@ namespace GCodeSender.NET
 					{
 						if (Util.GrblErrorProvider.Errors.ContainsKey(errorNo))
 						{
-							App.Message($"{line}\n{Util.GrblErrorProvider.Errors[errorNo]}");
+							App.Message($"'{activeCommand}':\n'{line}'\n{Util.GrblErrorProvider.Errors[errorNo]}");
 							goto skipMessage;
 						}
 						else
@@ -166,15 +155,18 @@ namespace GCodeSender.NET
 					else
 						Console.Error.WriteLine($"Couldn't parse Error ID in '{line}'");
 				}
-				App.Message(line);
+				App.Message($"'{activeCommand}':\n'{line}'");
 
-			skipMessage:;
+			skipMessage:
+				return true;
 			}
 			else if (line.StartsWith("Alarm"))
 			{
-				Stop();
 				App.Message(line);
+				return true;
 			}
+
+			return false;
 		}
 	}
 }

@@ -20,10 +20,7 @@ namespace GCodeSender.NET
 		private static bool _isConnected = false;
 		public static bool IsConnected
 		{
-			get
-			{
-				return _isConnected;
-			}
+			get { return _isConnected; }
 			private set
 			{
 				if (_isConnected != value)
@@ -45,80 +42,18 @@ namespace GCodeSender.NET
 		public static string PortName { get; private set; }
 
 		static Stream ConnectionStream;
-
-		static Timer ReceiveTimer;
-		static StringBuilder ReceivedString;
-		static byte[] InputBuffer;
+		public static StreamReader ConnectionReader { get; private set; }
+		public static StreamWriter ConnectionWriter { get; private set; }
 
 		private static Func<bool> ConnectionStreamAvailable;
 
 		static Connection()
 		{
-			ReceiveTimer = new Timer();
-			ReceiveTimer.Interval = Settings.Default.ReceiveTimerInterval;
-			ReceiveTimer.AutoReset = true;
-			ReceiveTimer.Elapsed += ReceiveTimer_Elapsed;
-
-			ReceivedString = new StringBuilder(Settings.Default.ReceiveBufferSize);
-
-			InputBuffer = new byte[Settings.Default.ReceiveBufferSize];
-		}
-
-		public delegate void LineReceivedDelegate(string line);
-		public static event LineReceivedDelegate LineReceived;
-
-		public static async void ReceiveTimer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			if (!ConnectionStream.CanRead)
-			{
-				Disconnect();
-				return;
-			}
-
-			if (!ConnectionStreamAvailable())
-				return;
-
-			int received = await ConnectionStream.ReadAsync(InputBuffer, 0, InputBuffer.Length);
-
-			if (received > 0)   //find line breaks (\r\n)
-			{
-				ReceivedString.Append(Encoding.ASCII.GetChars(InputBuffer, 0, received));
-
-				bool lineFound = true;
-
-				while (lineFound)
-				{
-					lineFound = false;
-
-					for (int searchIndex = 0; searchIndex < ReceivedString.Length; searchIndex++)
-					{
-						if (ReceivedString[searchIndex] == '\n')
-						{
-							string line;
-
-							if (ReceivedString[searchIndex - 1] == '\r')
-								line = ReceivedString.ToString(0, searchIndex - 1);  //discard \r + \n
-							else
-								line = ReceivedString.ToString(0, searchIndex);     //discard \n
-
-							LineReceived(line);
-
-							ReceivedString.Remove(0, searchIndex + 1);
-
-							lineFound = true;
-						}
-					}
-				}
-			}
-
-
+			
 		}
 
 		public static void Disconnect()
 		{
-			ReceiveTimer.Stop();
-			ReceivedString.Clear();
-
 			if (ConnectionStream != null)
 			{
 				ConnectionStream.Close();
@@ -132,9 +67,15 @@ namespace GCodeSender.NET
 		{
 			ConnectionStream = stream;
 
-			IsConnected = true;
+			if (ConnectionReader != null)
+				ConnectionReader.Dispose();
+			ConnectionReader = new StreamReader(ConnectionStream, Encoding.ASCII);
 
-			//ReceiveTimer.Start();
+			if (ConnectionWriter != null)
+				ConnectionWriter.Dispose();
+			ConnectionWriter = new StreamWriter(ConnectionStream, Encoding.ASCII) { AutoFlush = true, NewLine="\n" };
+
+			IsConnected = true;
 		}
 
 		public static bool ConnectNetwork(string address)
@@ -184,27 +125,5 @@ namespace GCodeSender.NET
 				return false;
 			}
 		}
-
-		public static void WriteLine(string line)
-		{
-			if(!ConnectionStream.CanWrite)
-			{
-				Disconnect();
-				return;
-			}
-
-			line += "\n";
-			byte[] lineBin = Encoding.ASCII.GetBytes(line);
-
-			ConnectionStream.Write(lineBin, 0, lineBin.Length);
-			ConnectionStream.Flush();
-
-			Console.Write(line);
-		}
-
-
-
-
-
 	}
 }

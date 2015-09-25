@@ -12,7 +12,7 @@ namespace GCodeSender.NET
 		private void buttonFileStart_Click(object sender, RoutedEventArgs e)
 		{
 			//testing
-			FileGCodeProvider x = new FileGCodeProvider(@"D:\Users\Martin\Desktop\SupportLogo.NCC");
+			FileGCodeProvider x = new FileGCodeProvider(@"D:\Users\Martin\Desktop\box_logo.tap");
             GCodeStreamer.SetGCodeProvider(x);
 			x.Start();
 		}
