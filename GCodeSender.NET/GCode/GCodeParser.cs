@@ -18,6 +18,7 @@ namespace GCodeSender.NET
 		public ParseDistanceMode ArcDistanceMode;
 		public DistanceUnit Units;
 		public Vector3 Position;
+		public int LastCommand;
 
 		public void Reset()
 		{
@@ -34,17 +35,33 @@ namespace GCodeSender.NET
 
 		private GCodeCommand ParseLine(MatchCollection matches)
 		{
-			if (matches[0].Groups[1].Value != "G")
-				return new OtherCode(matches);
+			int Command;
+
+			if (matches[0].Groups[1].Value == "G")
+			{
+				Command = int.Parse(matches[0].Groups[2].Value, inv);
+				LastCommand = Command;
+			}
+			else
+			{
+				if("XYZIJKR".Contains(matches[0].Groups[1].Value))
+				{
+					Command = LastCommand;
+				}
+				else
+				{
+					return new OtherCode(matches);
+				}
+			}
 
 			if (matches[0].Groups[2].Value.Contains('.'))
 				return new OtherCode(matches);
 
-			int Command = int.Parse(matches[0].Groups[2].Value, inv);
+
 
 			double? X = null, Y = null, Z = null, I = null, J = null, F = null, R = null;
 
-			for (int index = 1; index < matches.Count; index++)
+			for (int index = 0; index < matches.Count; index++)
 			{
 				double value = double.Parse(matches[index].Groups[2].Value, inv);
 
