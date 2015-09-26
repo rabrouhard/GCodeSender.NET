@@ -18,7 +18,7 @@ namespace GCodeSender.NET
 		public ParseDistanceMode ArcDistanceMode;
 		public DistanceUnit Units;
 		public Vector3 Position;
-		public int LastCommand;
+		public int LastCommand = -1;
 
 		public void Reset()
 		{
@@ -26,6 +26,7 @@ namespace GCodeSender.NET
 			ArcDistanceMode = ParseDistanceMode.Incremental;
 			Units = DistanceUnit.MM;
 			Position = new Vector3(0.0f, 0.0f, 0.0f);
+			LastCommand = -1;
 		}
 
 		public GCodeParser()
@@ -39,7 +40,24 @@ namespace GCodeSender.NET
 
 			if (matches[0].Groups[1].Value == "G")
 			{
-				Command = int.Parse(matches[0].Groups[2].Value, inv);
+				float CommandF = float.Parse(matches[0].Groups[2].Value, inv);
+				Command = (int)CommandF;
+
+				if (CommandF == 90.1)
+				{
+					ArcDistanceMode = ParseDistanceMode.Absolute;
+					return null;
+				}
+
+				if(CommandF == 91.1)
+				{
+					ArcDistanceMode = ParseDistanceMode.Incremental;
+					return null;
+                }
+
+				if(CommandF != Command)		//All other 'G' commands that have a decimal point
+					return new OtherCode(matches);
+
 				LastCommand = Command;
 			}
 			else
@@ -53,10 +71,6 @@ namespace GCodeSender.NET
 					return new OtherCode(matches);
 				}
 			}
-
-			if (matches[0].Groups[2].Value.Contains('.'))
-				return new OtherCode(matches);
-
 
 
 			double? X = null, Y = null, Z = null, I = null, J = null, F = null, R = null;
